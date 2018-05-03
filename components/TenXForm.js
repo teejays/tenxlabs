@@ -11,9 +11,13 @@ import {
   TouchableHighlight,
   View,
   Button,
-  ListView
+  ListView,
+  TouchableOpacity
 } from 'react-native';
-import ValidationComponent from '../node_modules/react-native-form-validator'
+import Style from './Style'
+import ValidationComponent from 'react-native-form-validator'
+import DateTimePicker from 'react-native-modal-datetime-picker';
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Constants
@@ -23,76 +27,108 @@ import ValidationComponent from '../node_modules/react-native-form-validator'
 * Form Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default class Form extends ValidationComponent {
+export default class TenXForm extends ValidationComponent {
   
   constructor (props) {
     super(props);
     
     // define default states
     this.state = {
-      participantInput: "ENTER PARTICIPANT NAME HERE",
+      eventName: "",
+      participantInput: "",
       participants: [],
-      judgeInput: "ENTER JUDGE NAME HERE",
-      judges: []
+      judgeInput: "",
+      judges: [],
+      isDateTimePickerVisible: false
     };
 
   }
 
-// something() {
-//   console.log('SUBMITTED!');
-//   console.log(this.state.participants);
-//   //console.log('SUBMITTED!');
+  // setters?
+  _setDateTime = (datetime) => this.setState({ eventDatetime: datetime });
+  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
 
-//   //this.state.participants.push(this.state.participantInput);
+  _handleDatePicked = (date) => {
+    console.log(date);
+    this._hideDateTimePicker();
+  };
 
-// }
-
-submitParticipant = () => {
-  const { participantInput, participants } = this.state;
-  participants.push(participantInput);
-}
-
-submitJudge = () => {
-  const { judgeInput, judges } = this.state;
-  judges.push(judgeInput);
-}
-
+  _submitForm = () => {
+    const { 
+        eventName,
+        participantInput,
+        participants,
+        judgeInput,
+        judges 
+    } = this.state;
+    participants.push(participantInput);
+    judges.push(judgeInput);
+  }
 
   render() {
     return (
       <View style={styles.container}>
 
-        <Text style={styles.text}>
+        <Text style={Style.h1}>
           SET UP 10X
+          {'\n'}
         </Text>
+
+        <Text>Name of Event:</Text>
+        <TextInput
+          style={Style.textInput}
+          ref="eventName"
+          onChangeText={(eventName) => this.setState({eventName})} 
+          value={this.state.eventName} />
+        <Text>{'\n'}</Text>
+
+        <TouchableOpacity onPress={this._showDateTimePicker}>
+          <Text>When is the event?</Text>
+        </TouchableOpacity>
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this._handleDatePicked}
+          onCancel={this._hideDateTimePicker}
+          mode="datetime"
+        />
 
         <Text>{'\n'}</Text>
 
         <Text>Presenters:</Text>
-        <TextInput ref="participantInput" onChangeText={(participantInput) => this.setState({participantInput})} value={this.state.participantInput} />
-
-        <TouchableHighlight onPress={this.submitParticipant.bind()}>
-            <Text>Submit</Text>
-        </TouchableHighlight>
+        <TextInput 
+          style={Style.textInput} 
+          ref="participantInput" 
+          onChangeText={(participantInput) => this.setState({participantInput})} 
+          value={this.state.participantInput} />
 
         <Text>{'\n'}</Text>
 
         <Text>Judges:</Text>
-        <TextInput ref="judgeInput" onChangeText={(judgeInput) => this.setState({judgeInput})} value={this.state.judgeInput} />
+        <TextInput 
+          style={Style.textInput} 
+          ref="judgeInput" 
+          onChangeText={(judgeInput) => this.setState({judgeInput})} 
+          value={this.state.judgeInput} />
 
-        <TouchableHighlight onPress={this.submitJudge.bind()}>
+        <Text>{'\n'}</Text>
+
+        <TouchableHighlight onPress={this._submitForm.bind()}>
             <Text>Submit</Text>
         </TouchableHighlight>
 
         <Text>{'\n'}</Text>
 
         <Text> 
-          Presenters: {'\n'} {'\n'}
+          Event Name:{'\n'}
+           {this.state.eventName}{'\n'}{'\n'}
+           {this.state.eventDatetime}{'\n'}{'\n'}
+          Presenters: {'\n'}
            {this.state.participants.map(
             function(object, key) {
               return <Text>{key+1}) {object}{'\n'}</Text>
-            })}
-          Judges: {'\n'} {'\n'}
+            })}{'\n'}{'\n'}
+          Judges: {'\n'}
            {this.state.judges.map(
             function(object, key) {
               return <Text>{key+1}) {object}{'\n'}</Text>
@@ -108,10 +144,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  text:{
-    color: 'blue'
+    alignItems: 'center'
   }
 });

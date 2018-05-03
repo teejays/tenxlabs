@@ -20,6 +20,7 @@ import TenXEvents from './../provider/MockEvent'
 * Constants
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 console.log(TenXEvents);
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Home Screen Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
