@@ -21,7 +21,7 @@ import Timer from './Timer'
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Home Screen Component
+* TenXEvent Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // props should be the event details

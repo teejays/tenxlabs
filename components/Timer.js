@@ -19,7 +19,7 @@ import {
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Home Screen Component
+* Timer Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 export default class Timer extends Component {
