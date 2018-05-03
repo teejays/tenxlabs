@@ -17,6 +17,7 @@ import {
 import { SearchBar, ListItem } from 'react-native-elements';
 import Timer from './Timer';
 import { UserImage } from './UserImage';
+import  Communication  from './Communication';
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -69,6 +70,7 @@ export default class TenXEvent extends Component {
     }
     return (
       <View>
+      <Communication/>
       <View style={styles.container}>
 
         <Text style={styles.time}>
