@@ -22,7 +22,7 @@ import Timer from './Timer'
 const subEvents = ["Presentation", "Audience Feedback", "Judges Feedback"];
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Home Screen Component
+* TenXEvent Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // props should be the event details

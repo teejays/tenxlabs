@@ -19,7 +19,7 @@ import {
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Home Screen Component
+* Timer Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 export default class Timer extends Component {
@@ -32,7 +32,6 @@ export default class Timer extends Component {
 
     // change state every second
     setInterval(() => {
-      console.log(this.props.isRunning);
       if (this.props.isRunning) {
         this.setState(previousState => {
         return { secondsRemaining: previousState.secondsRemaining - 1 };

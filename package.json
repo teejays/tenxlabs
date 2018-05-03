@@ -7,8 +7,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "eslint": "^4.19.1",
     "react": "16.3.1",
     "react-native": "0.55.3",
+    "react-native-form-library": "^1.0.6",
+    "react-native-form-validator": "^0.2.0",
+    "react-native-tab-view": "0.0.77",
     "react-navigation": "^1.5.11"
   },
   "devDependencies": {
