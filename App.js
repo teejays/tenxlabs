@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 import HomeScreen from './components/HomeScreen'
 import DetailScreen from './components/DetailScreen'
+import SetUpScreen from './components/SetUpScreen'
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Root Component
@@ -29,6 +30,9 @@ const RootStack = StackNavigator({
   },
   Details: {
     screen: DetailScreen,
+  },
+  SetUp: {
+    screen: SetUpScreen,
   },
 },
 {
