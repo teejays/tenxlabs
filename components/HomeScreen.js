@@ -13,6 +13,7 @@ import {
   Button
 } from 'react-native';
 import TenXEvent from './TenXEvent'
+import Form from './Form'
 import MockEvent from './../provider/MockEvent'
 
 
@@ -31,7 +32,8 @@ export default class HomeScreen extends Component<Props> {
       <View style={styles.container}>
         
         <TenXEvent eventDetails={MockEvent} />
-         
+        <Form/>
+
          <Button
           title="Go to Details"
           onPress={() => this.props.navigation.navigate('Details')}
