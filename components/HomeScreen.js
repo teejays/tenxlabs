@@ -13,13 +13,13 @@ import {
   Button
 } from 'react-native';
 import TenXEvent from './TenXEvent'
-import MockEvent from './../provider/MockEvent'
+import TenXEvents from './../provider/MockEvent'
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Constants
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+console.log(TenXEvents);
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Home Screen Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -30,7 +30,7 @@ export default class HomeScreen extends Component<Props> {
     return (
       <View style={styles.container}>
         
-        <TenXEvent eventDetails={MockEvent} />
+        <TenXEvent eventDetails={TenXEvents[0]} />
          
          <Button
           title="Go to Details"

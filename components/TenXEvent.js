@@ -19,6 +19,7 @@ import Timer from './Timer'
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Constants
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+const subEvents = ["Presentation", "Audience Feedback", "Judges Feedback"];
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Home Screen Component
@@ -44,7 +45,6 @@ export default class TenXEvent extends Component {
         return { isRunning: !previousState.isRunning };
       });
 
-    console.log("button pressed");
   }
 
   render() {
@@ -58,7 +58,7 @@ export default class TenXEvent extends Component {
         {'\n'}
         <Text> 
           Presenters: {'\n'} {'\n'}
-           {this.state.eventDetails.Presenters.map(
+           {this.state.eventDetails.presenters.map(
             function(object, key) {
               return <Text>{key+1}.{object}{'\n'}</Text>
             })}
