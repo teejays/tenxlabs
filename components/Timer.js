@@ -26,13 +26,19 @@ export default class Timer extends Component {
   constructor (props) {
     super(props);
     // define default states
-    this.state = {secondsRemaining: props.seconds};
+    this.state = {
+      secondsRemaining: props.seconds
+    };
 
     // change state every second
     setInterval(() => {
-      this.setState(previousState => {
+      console.log(this.props.isRunning);
+      if (this.props.isRunning) {
+        this.setState(previousState => {
         return { secondsRemaining: previousState.secondsRemaining - 1 };
-      });
+      });  
+      }
+      
     }, 1000);
   }
   render() {

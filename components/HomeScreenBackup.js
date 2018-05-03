@@ -20,15 +20,34 @@ import MockEvent from './../provider/MockEvent'
 * Constants
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+const instructions = Platform.select({
+  ios: 'Press Cmd+R to reload,\n' +
+    'Cmd+D or shake for dev menu',
+  android: 'Double tap R on your keyboard to reload,\n' +
+    'Shake or press menu button for dev menu',
+});
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Home Screen Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 type Props = {};
-export default class HomeScreen extends Component<Props> {
+export default class HomeScreenBackup extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.welcome}>
+          Welcome to React Native!
+        </Text>
+        <Text style={styles.welcome}>
+          The 10X Lab
+        </Text>
+        <Text style={styles.instructions}>
+          To get started, edit App.js
+        </Text>
+        <Text style={styles.instructions}>
+          {instructions}
+        </Text>
         
         <TenXEvent eventDetails={MockEvent} />
          

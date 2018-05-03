@@ -13,6 +13,7 @@ import {
   Button,
   ListView
 } from 'react-native';
+import Timer from './Timer'
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -30,23 +31,42 @@ export default class TenXEvent extends Component {
     super(props);
     
     // define default states
-    this.state = {eventDetails: props.eventDetails};
+    this.state = {
+      eventDetails: props.eventDetails,
+      isRunning: false,
+    };
 
   }
+  
+  // function that runs when button is pressed
+  toggleEventRunningStatus() {
+    this.setState(previousState => {
+        return { isRunning: !previousState.isRunning };
+      });
+
+    console.log("button pressed");
+  }
+
   render() {
     return (
       <View style={styles.container}>
+
         <Text style={styles.time}>
           Welcome to {this.state.eventDetails.Name}
         </Text>
+
         {'\n'}
         <Text> 
           Presenters: {'\n'} {'\n'}
            {this.state.eventDetails.Presenters.map(
-            function(object, i) {
-              return <Text>{i+1}.{object}{'\n'}</Text>
+            function(object, key) {
+              return <Text>{key+1}.{object}{'\n'}</Text>
             })}
         </Text>
+
+        <Button title={this.state.isRunning? "Pause": "Start"} color="#841584" onPress={this.toggleEventRunningStatus.bind(this)} />
+
+        <Timer seconds="90" isRunning={this.state.isRunning}/>
       </View>
     );
   }
