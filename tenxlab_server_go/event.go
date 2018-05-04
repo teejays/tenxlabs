@@ -84,6 +84,7 @@ func NewEvent(eventType, name string, datetimeStart time.Time, presenters, judge
 		var timerEvents []TimerEvent
 		timerEvents = append(timerEvents, TimerEvent{"Presentation", s.Presenter.Name, s.PresentationDuration})
 		timerEvents = append(timerEvents, TimerEvent{"Feedback", "Audience Feeback", s.AudienceFeedbackDuration})
+		timerEvents = append(timerEvents, TimerEvent{"Feedback", "Judge Scoring", (20 * time.Second)})
 		for _, judge := range s.Judges {
 			timerEvents = append(timerEvents, TimerEvent{"Judge Feedback", judge.Name, s.JudgeFeedbackDuration})
 		}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"flag"
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
 	"github.com/teejays/gofiledb"
@@ -23,6 +24,9 @@ func main() {
 	}
 
 	// set the webserver
+	var serverAddress string = ":3000"
+	flag.StringVar(&serverAddress, "server address", ":3000", "(optional) Provide the address where the web server should listen")
+
 	http.HandleFunc("/ws", handlerWs)
 
 	http.HandleFunc("/event", handlerEvents)
@@ -31,7 +35,7 @@ func main() {
 	http.HandleFunc("/screen/control", handlerScreenControl)
 
 	fmt.Println("Listening for requests..")
-	err = http.ListenAndServe(":3000", nil)
+	err = http.ListenAndServe(serverAddress, nil)
 	if err != nil {
 		panic("ListenAndServe: " + err.Error())
 	}
