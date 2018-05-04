@@ -15,7 +15,7 @@
 				<strong>Connection Instructions</strong>
 			</div>
 			<br />
-			<div id="screen-code-description">Please enter the following code on your TenXLab App to connect</div>
+			<div id="screen-code-description">Please enter the following code on your 10xLab App to connect</div>
 			<div id="screen-code"></div>
 		</div>
 		
@@ -69,7 +69,6 @@
 			if (this.remaining_seconds > 0) {
 				this.remaining_seconds -= 1;
 				this.updateTimerSeconds();
-				this.updateProgressBar(this.remaining_seconds, this.total_seconds, $('#timer-progress-bar'));
 			}
 		},
 
@@ -225,6 +224,7 @@
 			if (this.hasEventStarted) {
 				console.log("Event has already been started.")
 			} else {
+				this.hasEventStarted = true
 				this.beginCurrentTimerEvent();
 			}
 		},

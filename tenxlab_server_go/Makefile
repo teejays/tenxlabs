@@ -12,11 +12,12 @@ run: build
 	./$(BINARY_NAME) -server="$(SERVER)"	
 run-bg:
 	nohup ./$(BINARY_NAME) -server="$(SERVER)" > $(OUTPUT_FILE) &
+sudo-kill:
+	pkill $(BINARY_NAME)
 
 sudo-run: build
 	sudo ./$(BINARY_NAME) -server="$(SERVER)"	
 sudo-run-bg:
 	nohup sudo -b ./$(BINARY_NAME) -server="$(SERVER)" > $(OUTPUT_FILE)
-
-kill:
-	sudo pkill tenxlab_server.out
+sudo-kill:
+	sudo pkill pkill $(BINARY_NAME)
