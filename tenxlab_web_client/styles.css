@@ -1,4 +1,4 @@
-#main-container, #unique-code-container {
+#event-container, #screen-code-container {
 	height: 100%;
 	width: 100%;
 	background: #C0C0C0;
@@ -7,15 +7,20 @@
 
 	font-family: 'Montserrat', sans-serif;
 	
+	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
-#event-name, #unique-code-text{
+#event-name, #screen-code-title {
 	font-size: 4em;	
 }
 
-#timer-countdown, #unique-code {
+#screen-code-description {
+	font-size: 3em;
+}
+
+#timer-countdown, #screen-code {
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: center;
@@ -31,10 +36,12 @@
 	color: red;
 }
 
-#timer-countdown #timer-time, #unique-code {
+#timer-countdown #timer-time, #screen-code{
 	font-size: 16em;
 	font-weight: bold;
 }
+
+
 
 #timer-countdown #timer-unit {
 	font-size: 6em;
