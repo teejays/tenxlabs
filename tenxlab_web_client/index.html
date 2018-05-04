@@ -9,6 +9,8 @@
 	</head>
 
 	<body>
+		<div id="unique-code">
+		</div>
 		<div id="main-container">
 
 			<div id="event-name"></div>
@@ -131,7 +133,35 @@
 			this.socket.onopen = function(event) {
 				console.log("WebSocket Opened...");
 			}
-
+			this.socket.onmessage = function(event) {
+				data = JSON.parse(event.data);
+				console.log(data);
+				if (data && data.MessageType){
+					switch(data.MessageType){
+						case "UniqueCode":
+							tenxApp.Webclient.setUniqueCode(data.Message);
+							//comment out later
+							tenxApp.Webclient.hideUniqueCode();
+							break;
+						case "Events":
+							tenxApp.Webclient.hideUniqueCode();
+							tenxApp.Webclient.eventData = tenxApp.Webclient.getEventData(data.Message);
+							break;
+						case "Start":
+							tenxApp.Webclient.beginCurrentTimerEvent();
+							break;
+						case "Pause":
+							tenxApp.Timer.pauseTimer();
+							break;
+						case "Resume":
+							tenxApp.Timer.resumeTimer();
+							break;
+						case "Next":
+							tenxApp.Webclient.nextTimerEvent();
+							break;
+					}
+				}
+			}
 			// get the 10x event info
 			this.eventData = pullEventById(1);
 
@@ -211,6 +241,29 @@
     		if (!results) return null;
     		if (!results[2]) return '';
     		return decodeURIComponent(results[2].replace(/\+/g, " "));
+		},
+
+		setUniqueCode: function(code){
+			$("#unique-code").html(code);
+		},
+
+		hideUniqueCode: function(){
+			document.getElementById("unique-code").style.display = 'none';
+			document.getElementById("main-container").style.display = 'flex';
+		},
+
+		getEventData: function(data){
+			var eventdata = new Object();
+			eventdata.type = data.EventType;
+			eventdata.name = data.EventName;
+			eventdata.datetime = data.DatetimeStart;
+			eventdata.duration = data.EventDuration;
+			eventdata.presenters = data.Presenters;
+			eventdata.judges = data.Judges;
+			eventdata.presentationTime = data.PresentationDuration;
+			eventdata.audienceFeedbackTime = data.AudienceFeedbackDuration;
+			eventdata.judgeFeedbackTime = data.JudgeFeedbackDuration;
+			eventdata.subEvents = data.SubEvents;
 		}
 
 	};

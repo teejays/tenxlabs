@@ -7,16 +7,17 @@
 
 	font-family: 'Montserrat', sans-serif;
 	
-	display: flex;
 	flex-direction: column;
 	justify-content: center;
+
+	display: none;
 }
 
 #event-name {
 	font-size: 4em;	
 }
 
-#timer-countdown {
+#timer-countdown, #unique-code {
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: center;
@@ -32,7 +33,7 @@
 	color: red;
 }
 
-#timer-countdown #timer-time {
+#timer-countdown #timer-time, #unique-code {
 	font-size: 16em;
 	font-weight: bold;
 }
