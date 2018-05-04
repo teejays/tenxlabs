@@ -37,7 +37,8 @@ var Style = {
 		textAlign: 'center'
 	},
 	row:{
-		flexDirection: 'row'
+		flexDirection: 'row',
+		flexWrap: 'wrap'
 	},
 	iconCircle: {
 	    width: 100,
@@ -49,8 +50,11 @@ var Style = {
 	},
 	button: {
 		backgroundColor: secondColor,
-		padding: 10,
-		//color: 'white'
+		padding: 10
+	},
+	buttonText:{
+		fontSize: 18,
+		color: '#FFF'
 	},
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 

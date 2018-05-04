@@ -7,13 +7,15 @@ import {
   View,
   Image,
   Text,
-  TextInput,
   ScrollView,
   TouchableHighlight
 } from 'react-native';
+import PeopleList from './PeopleList'
 import Style from './Style'
 import Moment from 'moment'
 import Remote from './Remote'
+import ConnectionInput from './ConnectionInput'
+import Request from './Request'
 import TenXEvents from '../provider/MockEvent'
 import CapitalizedText from './CapitalizedText'
 
@@ -28,23 +30,15 @@ export default class EventScreen extends Component {
     
     // define default states
     this.state = {
-      event: TenXEvents[0],
-      code: 'CNTS'
+      event: TenXEvents[0]
     };
 
-  }
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Internal Methods
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-  _spitCode = () => {
-    console.log(this.state.code);
   }
 
   render () {
 
     // declare to be used in render
-    const { event, code } = this.state;
+    const { event } = this.state;
 
     return (
       <ScrollView style={Style.scrollScreen}>
@@ -64,7 +58,7 @@ export default class EventScreen extends Component {
           </Text>
            {event.presenters.map(
             function(object, key) {
-              var url = 'https://apps.api.nextjump.com/v1/topten/user/'+object.uid+'/image';
+              var url = 'https://apps.api.nextjump.com/v1/topten/user/'+object.id+'/image';
               return <Image
                 style={Style.eventIcon}
                 resizeMode={'contain'}
@@ -72,6 +66,8 @@ export default class EventScreen extends Component {
               />
             })}
         </View>
+
+        <Request code="CNTS"/>
 
         // judges
         <View style={[Style.center, Style.row]}>
@@ -80,7 +76,7 @@ export default class EventScreen extends Component {
           </Text>
            {event.judges.map(
             function(object, key) {
-              var url = 'https://apps.api.nextjump.com/v1/topten/user/'+object.uid+'/image';
+              var url = 'https://apps.api.nextjump.com/v1/topten/user/'+object.id+'/image';
               return <Image
                 style={Style.eventIcon}
                 resizeMode={'contain'}
@@ -89,23 +85,10 @@ export default class EventScreen extends Component {
             })}
         </View>
 
-        // text input + button - TODO: Make into a component
-        <View style={[Style.center,Style.section]}>
-          <TextInput
-            style={[Style.textInput,Style.eventCode]}
-            ref="code"
-            onChangeText={(code) => this.setState({code})} 
-            value={code} />
-        </View>
+        <ConnectionInput/>
+        <Remote/>
 
-        <View style={[Style.center,Style.section]}>
-          <TouchableHighlight 
-            style={Style.button}
-            onPress={this._spitCode}
-          >
-            <Text>Connect</Text>
-          </TouchableHighlight>
-        </View>
+        <PeopleList/>
 
       </ScrollView>
     )

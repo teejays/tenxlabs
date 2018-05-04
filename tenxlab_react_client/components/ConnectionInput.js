@@ -1,12 +1,14 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Remote
+* ConnectionInput
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import React, { Component } from 'react';
 import {
+  Platform,
   ScrollView,
   View,
   Text,
+  TextInput,
   TouchableHighlight
 } from 'react-native';
 import Style from './Style';
@@ -17,47 +19,52 @@ import Style from './Style';
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Remote Component
+* ConnectionInput Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default class Remote extends Component {
+export default class ConnectionInput extends Component {
   
   constructor (props) {
     super(props);
     
     // define default states
     this.state = {
-      // whatever
+      code: 'CNTS'
     };
 
   }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Internal Methods
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+  _spitCode = () => {
+    console.log(this.state.code);
+  }
+
   render() {
+
+    // declare to be used in render
+    const { code } = this.state;
 
     return (
       <View style={Style.center}>
-
-        <TouchableHighlight 
-          style={Style.button}
-        >
-          <Text style={Style.buttonText}>Start</Text>
-        </TouchableHighlight>
-
-        <View style={Style.row}>
-          <TouchableHighlight 
-            style={Style.button}
-          >
-            <Text style={Style.buttonText}>Next</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight 
-            style={Style.button}
-          >
-            <Text style={Style.buttonText}>Pause</Text>
-          </TouchableHighlight>
+        // text input + button - TODO: Make into a component
+        <View style={[Style.center,Style.section]}>
+          <TextInput
+            style={[Style.textInput,Style.eventCode]}
+            ref="code"
+            onChangeText={(code) => this.setState({code})} 
+            value={code} />
         </View>
 
-
+        <View style={[Style.center,Style.section]}>
+          <TouchableHighlight 
+            style={Style.button}
+            onPress={this._spitCode}
+          >
+            <Text style={Style.buttonText}>Connect</Text>
+          </TouchableHighlight>
+        </View>
       </View>
     );
   }
