@@ -4,12 +4,14 @@ import {
   Image,
   Text,
   TextInput,
-  ScrollView
+  ScrollView,
+  TouchableHighlight
 } from 'react-native';
 import Style from './Style'
 import Moment from 'moment'
 import TenXRemote from './TenXRemote'
 import TenXEvents from '../provider/MockEvent'
+import CapitalizedText from './CapitalizedText'
 
 
 export default class EventScreen extends Component {
@@ -26,15 +28,18 @@ export default class EventScreen extends Component {
 
   }
 
+  // internal methods
+  _spitCode = () => {
+    console.log(this.state.code);
+  }
+
   render () {
     const { event, code } = this.state;
 
     return (
       <ScrollView style={Style.scrollScreen}>
         <View style={Style.center}>
-          <Text style={Style.h1}>
-            { event.type } 10x
-          </Text>
+          <CapitalizedText style={Style.h1}>{event.type + ' 10x'}</CapitalizedText>
           <Text>
             { Moment(event.datetime).format('dddd, MMM d @ hh:mm a') }
           </Text>
@@ -76,6 +81,15 @@ export default class EventScreen extends Component {
             ref="code"
             onChangeText={(code) => this.setState({code})} 
             value={code} />
+        </View>
+
+        <View style={[Style.center,Style.section]}>
+          <TouchableHighlight 
+            style={Style.button}
+            onPress={this._spitCode}
+          >
+            <Text>Connect</Text>
+          </TouchableHighlight>
         </View>
 
       </ScrollView>

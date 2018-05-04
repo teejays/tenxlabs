@@ -1,6 +1,7 @@
 
 // Ease of whatever
 var mainColor = '#e6e6e6';
+var secondColor = '#A9A9A9';
 
 var Style = {
 
@@ -41,6 +42,18 @@ var Style = {
 	    padding: 30,
 	    margin: 10
 	},
+	button: {
+		backgroundColor: secondColor,
+		padding: 10,
+		//color: 'white'
+	},
+
+// Font
+	h1:{
+		fontSize: 24,
+		fontWeight: 'bold',
+		marginTop: 15
+	},
 
 // Remote
 	remoteButton: {
@@ -65,9 +78,5 @@ var Style = {
 	}
 
 };
-
-var Font = {
-
-}
 
 export default Style;
