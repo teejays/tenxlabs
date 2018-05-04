@@ -6,20 +6,20 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
+  ScrollView,
   Button
 } from 'react-native';
 import Form from './Form'
+import Title from './Title'
+import Style from './Style'
 
 export default class SetUpScreen extends Component {
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Form/>
-        <Button
-          title="Go to Home"
-          onPress={() => this.props.navigation.goBack()}
-        />
-      </View>
+      <ScrollView style={Style.scrollScreen}>
+        <Title text="Set Up 10x"></Title>
+        <Form/>
+      </ScrollView>
     );
   }
 }

@@ -3,6 +3,7 @@
 * Colors and Fonts - collated for ease of changing
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+var bgColor = '#FFF';
 var mainColor = '#e6e6e6';
 var secondColor = '#A9A9A9';
 
@@ -15,20 +16,27 @@ var Style = {
 		flex: 1,
     	justifyContent: 'center',
     	alignItems: 'center',
-    	backgroundColor: mainColor,
+    	backgroundColor: bgColor
 	},
 	scrollScreen:{
 		flex: 1,
-		backgroundColor: mainColor
+		backgroundColor: bgColor
+	},
+	title:{
+		flex: 1,
+		backgroundColor: mainColor,
+		alignSelf: 'stretch',
+    	textAlign: 'center',
+    	paddingTop: 5,
+    	paddingBottom: 10
 	},
 	section:{
-		marginTop: 20,
-		marginBottom: 20
+		marginTop: 10,
+		marginBottom: 10
 	},
 	center:{
 		justifyContent: 'center',
     	alignItems: 'center',
-    	marginTop: 10
 	},
 	textInput:{
 		borderBottomColor: 'black',
@@ -41,16 +49,18 @@ var Style = {
 		flexWrap: 'wrap'
 	},
 	iconCircle: {
-	    width: 100,
-	    height: 100,
-	    borderRadius: 100/2,
+	    width: 75,
+	    height: 75,
+	    borderRadius: 75/2,
 	    backgroundColor: '#FFF',
 	    padding: 30,
 	    margin: 10
 	},
 	button: {
 		backgroundColor: secondColor,
-		padding: 10
+		padding: 10,
+		marginLeft: 3,
+		marginRight: 3
 	},
 	buttonText:{
 		fontSize: 18,

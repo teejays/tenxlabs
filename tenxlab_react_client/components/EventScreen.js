@@ -10,12 +10,12 @@ import {
   ScrollView,
   TouchableHighlight
 } from 'react-native';
-import PeopleList from './PeopleList'
+import Title from './Title'
 import Style from './Style'
 import Moment from 'moment'
+import PeopleList from './PeopleList'
 import ConnectionInput from './ConnectionInput'
 import TenXEvents from '../provider/MockEvent'
-import CapitalizedText from './CapitalizedText'
 
 
 export default class EventScreen extends Component {
@@ -42,15 +42,17 @@ export default class EventScreen extends Component {
       <ScrollView style={Style.scrollScreen}>
 
         // title
-        <View style={Style.center}>
-          <CapitalizedText style={Style.h1}>{event.type + ' 10x'}</CapitalizedText>
+        <View style={[Style.center]}>
+          <Title text={event.type + ' 10x'}></Title>
           <Text>
+            {'\n'}
             { Moment(event.datetime).format('dddd, MMM d @ hh:mm a') }
+            {'\n\n'}
           </Text>
         </View>
 
         // presenters
-        <View style={Style.center}><Text>Presenters</Text></View>
+        <View style={[Style.center,Style.section]}><Text>Presenters</Text></View>
         <View style={[Style.center, Style.row]}>
            {event.presenters.map(
             function(object, key) {
@@ -64,7 +66,7 @@ export default class EventScreen extends Component {
         </View>
 
         // judges
-        <View style={Style.center}><Text>Judges</Text></View>
+        <View style={[Style.center,Style.section]}><Text>Judges</Text></View>
         <View style={[Style.center, Style.row]}>
            {event.judges.map(
             function(object, key) {
@@ -77,7 +79,9 @@ export default class EventScreen extends Component {
             })}
         </View>
 
-        <ConnectionInput/>
+        <View style={Style.section}> 
+          <ConnectionInput/>
+        </View>
 
       </ScrollView>
     )
