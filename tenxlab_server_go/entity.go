@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"time"
 )
 
 type Event struct {
-	EventId       int
+	Id            int
 	EventType     string
 	Name          string
 	DatetimeStart time.Time
@@ -52,7 +53,7 @@ type TimerEvent struct {
 func NewEvent(eventId int, eventType, name string, datetimeStart time.Time, presenters, judges []User, eventDuration, presentationDuration, audienceFeedbackDuration, judgeFeedbackDuration time.Duration) *Event {
 
 	var e Event
-	e.EventId = eventId
+	e.Id = eventId
 	e.EventType = eventType
 	e.Name = name
 	e.DatetimeStart = datetimeStart
@@ -89,22 +90,42 @@ func NewEvent(eventId int, eventType, name string, datetimeStart time.Time, pres
 	return &e
 }
 
-var mockEvent1 *Event
+var eventsMap map[int]*Event
+
+var mockPresenters []User = []User{
+	User{Id: 1, Name: "Abhay Sesha"},
+	User{Id: 2, Name: "Supriya Mishra"},
+	User{Id: 3, Name: "Darrell Platz"},
+}
+
+var mockJudges []User = []User{
+	User{Id: 4, Name: "Tom Fuller"},
+	User{Id: 5, Name: "Xuelan Zhang"},
+	User{Id: 6, Name: "Nayan Busa"},
+}
+var mockEvent1 *Event = NewEvent(1, "Engineering 10x", "Engineering 10x", time.Now(), mockPresenters, mockJudges, (1 * time.Hour), (5 * time.Minute), (2 * time.Minute), (2 * time.Minute))
 
 func init() {
-	mockPresenters := []User{
-		User{Id: 1, Name: "Abhay Sesha"},
-		User{Id: 2, Name: "Supriya Mishra"},
-		User{Id: 3, Name: "Darrell Platz"},
-	}
-	mockJudges := []User{
-		User{Id: 4, Name: "Tom Fuller"},
-		User{Id: 5, Name: "Xuelan Zhang"},
-		User{Id: 6, Name: "Nayan Busa"},
-	}
-	mockEvent1 = NewEvent(1, "Engineering 10x", "Engineering 10x", time.Now(), mockPresenters, mockJudges, (1 * time.Hour), (5 * time.Minute), (2 * time.Minute), (2 * time.Minute))
+	eventsMap = make(map[int]*Event)
+	addEvent(mockEvent1)
+}
+
+func addEvent(e *Event) {
+	eventsMap[e.Id] = e
 }
 
 func getEvents() []*Event {
-	return []*Event{mockEvent1}
+	var events []*Event
+	for _, e := range eventsMap {
+		events = append(events, e)
+	}
+	return events
+}
+
+func getEventById(eventId int) (*Event, error) {
+	e, exists := eventsMap[eventId]
+	if !exists {
+		return nil, fmt.Errorf("No event exists for event id %d", eventId)
+	}
+	return e, nil
 }
