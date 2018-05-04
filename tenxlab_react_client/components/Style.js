@@ -83,9 +83,15 @@ var Style = {
 * Event
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	eventIcon: {
-		width: 75,
-		height: 75,
-		borderRadius: 75/2,
+		width: 60,
+		height: 60,
+		borderRadius: 60/2,
+		margin: 5
+	},
+	eventIconJudge: {
+		width: 40,
+		height: 40,
+		borderRadius: 40/2,
 		margin: 5
 	},
 	eventCode: {

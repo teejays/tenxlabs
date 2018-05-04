@@ -70,7 +70,7 @@ export default class EventScreen extends Component {
             function(object, key) {
               var url = 'https://apps.api.nextjump.com/v1/topten/user/'+object.id+'/image';
               return <Image
-                style={Style.eventIcon}
+                style={Style.eventIconJudge}
                 resizeMode={'contain'}
                 source={{uri: url}}
               />
