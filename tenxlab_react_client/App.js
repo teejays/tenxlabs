@@ -9,6 +9,7 @@ import { StackNavigator } from 'react-navigation';
 import HomeScreen from './components/HomeScreen'
 import DetailScreen from './components/DetailScreen'
 import SetUpScreen from './components/SetUpScreen'
+import ControlScreen from './components/ControlScreen'
 import LaunchScreen from './components/LaunchScreen'
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -44,6 +45,9 @@ const RootStack = StackNavigator({
   SetUp: {
     screen: SetUpScreen,
   },
+  Control:{
+    screen: ControlScreen,
+  }
 },
 {
   initialRouteName: 'Launch',

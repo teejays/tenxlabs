@@ -44,6 +44,26 @@ export default class TenXRemote extends Component {
           </Text>
         </View>
 
+        <View style={[Style.center,Style.row]}>
+          <Text style={Style.remoteButton}>
+            START
+          </Text>
+
+          <Text style={Style.remoteButton}>
+            STOP
+          </Text>
+        </View>
+
+        <View style={[Style.center,Style.row]}>
+          <Text style={Style.remoteButton}>
+            SKIP
+          </Text>
+
+          <Text style={Style.remoteButton}>
+            PAUSE
+          </Text>
+        </View>
+
       </ScrollView>
     );
   }
