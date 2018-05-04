@@ -51,7 +51,7 @@ export default class ConnectionInput extends Component {
 
   connectServer() {
     const { code } = this.state;
-    axios.post('http://34.211.129.88:80/screen/connect',{
+    axios.post('http://34.211.129.88:3000/screen/connect',{
       "code": code,
       "eventId":1
     })
@@ -62,7 +62,7 @@ export default class ConnectionInput extends Component {
   sendStart() {
     const { appToken } = this.state;
     console.log(appToken);
-    axios.post('http://34.211.129.88:80/screen/control',{
+    axios.post('http://34.211.129.88:3000/screen/control',{
       "appToken": appToken,
       "action": 'start'
     })
@@ -72,7 +72,7 @@ export default class ConnectionInput extends Component {
 
   sendPause() {
     const { appToken } = this.state;
-    axios.post('http://34.211.129.88:80/screen/control',{
+    axios.post('http://34.211.129.88:3000/screen/control',{
       "appToken": appToken,
       "action": 'pause'
     })
@@ -82,7 +82,7 @@ export default class ConnectionInput extends Component {
 
   sendNext() {
     const { appToken } = this.state;
-    axios.post('http://34.211.129.88:80/screen/control',{
+    axios.post('http://34.211.129.88:3000/screen/control',{
       "appToken": appToken,
       "action": 'next'
     })
@@ -92,7 +92,7 @@ export default class ConnectionInput extends Component {
 
   sendResume() {
     const { appToken } = this.state;
-    axios.post('http://34.211.129.88:80/screen/control',{
+    axios.post('http://34.211.129.88:3000/screen/control',{
       "appToken": appToken,
       "action": 'resume'
     })
