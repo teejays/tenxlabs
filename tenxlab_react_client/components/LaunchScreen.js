@@ -10,7 +10,7 @@ import Style from './Style'
 export default class LaunchScreen extends Component {
   componentDidMount() {    
     // hardcode loading delay
-    this.props.navigation.navigate('SetUp');
+    this.props.navigation.navigate('Control');
     // setTimeout(function(navigation){
       
     // }, 1500); 

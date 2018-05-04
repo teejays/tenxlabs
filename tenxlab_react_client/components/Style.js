@@ -40,7 +40,19 @@ var Style = {
 	    backgroundColor: '#FFF',
 	    padding: 30,
 	    margin: 10
+	},
+
+// Remote
+	remoteButton: {
+		width: 100,
+	    height: 60,
+	    borderRadius: 100/2,
+	    backgroundColor: 'red',
+	    textAlign: 'center',
+	    padding: 20,
+	    margin: 5
 	}
+
 };
 
 export default Style;
