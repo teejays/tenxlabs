@@ -39,7 +39,7 @@ export default class ConnectionInput extends Component {
     this.sendStart = this.sendStart.bind(this);
     this.sendPause = this.sendPause.bind(this);
     this.sendNext = this.sendNext.bind(this);
-    this.sendPrevious = this.sendPrevious.bind(this);
+    this.sendResume = this.sendResume.bind(this);
 
   }
 
@@ -90,11 +90,11 @@ export default class ConnectionInput extends Component {
       .catch(error => console.log(error));
   }
 
-  sendPrevious() {
+  sendResume() {
     const { appToken } = this.state;
     axios.post('http://34.211.129.88:80/screen/control',{
       "appToken": appToken,
-      "action": 'previous'
+      "action": 'resume'
     })
       .then(response => console.log(response))
       .catch(error => console.log(error));
@@ -135,12 +135,18 @@ export default class ConnectionInput extends Component {
 
           <TouchableHighlight 
             style={Style.button}
+            onPress={this.sendResume}
+          >
+            <Text style={Style.buttonText}>Resume</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight 
+            style={Style.button}
             onPress={this.sendPause}
           >
             <Text style={Style.buttonText}>Pause</Text>
           </TouchableHighlight>
 
-          <View style={Style.row}>
             <TouchableHighlight 
               style={Style.button}
               onPress={this.sendNext}
@@ -148,14 +154,7 @@ export default class ConnectionInput extends Component {
               <Text style={Style.buttonText}>Next</Text>
             </TouchableHighlight>
 
-            <TouchableHighlight 
-              style={Style.button}
-              onPress={this.sendPrevious}
-            >
-              <Text style={Style.buttonText}>Previous</Text>
-            </TouchableHighlight>
-          </View>
-
+            
 
         </View>
 
