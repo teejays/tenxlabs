@@ -13,9 +13,7 @@ import {
 import PeopleList from './PeopleList'
 import Style from './Style'
 import Moment from 'moment'
-import Remote from './Remote'
 import ConnectionInput from './ConnectionInput'
-import Request from './Request'
 import TenXEvents from '../provider/MockEvent'
 import CapitalizedText from './CapitalizedText'
 
@@ -52,10 +50,8 @@ export default class EventScreen extends Component {
         </View>
 
         // presenters
+        <View style={Style.center}><Text>Presenters</Text></View>
         <View style={[Style.center, Style.row]}>
-          <Text>
-            Presenters
-          </Text>
            {event.presenters.map(
             function(object, key) {
               var url = 'https://apps.api.nextjump.com/v1/topten/user/'+object.id+'/image';
@@ -67,13 +63,9 @@ export default class EventScreen extends Component {
             })}
         </View>
 
-        <Request code="CNTS"/>
-
         // judges
+        <View style={Style.center}><Text>Judges</Text></View>
         <View style={[Style.center, Style.row]}>
-          <Text>
-            Judges
-          </Text>
            {event.judges.map(
             function(object, key) {
               var url = 'https://apps.api.nextjump.com/v1/topten/user/'+object.id+'/image';
@@ -86,9 +78,6 @@ export default class EventScreen extends Component {
         </View>
 
         <ConnectionInput/>
-        <Remote/>
-
-        <PeopleList/>
 
       </ScrollView>
     )

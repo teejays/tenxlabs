@@ -12,6 +12,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 import Style from './Style';
+import axios from 'axios';
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -29,26 +30,83 @@ export default class ConnectionInput extends Component {
     
     // define default states
     this.state = {
-      code: 'CNTS'
-    };
+        code: "",
+        appToken: "",
+        eventId: 1
+    }
+    
+    this.connectServer = this.connectServer.bind(this);
+    this.sendStart = this.sendStart.bind(this);
+    this.sendPause = this.sendPause.bind(this);
+    this.sendNext = this.sendNext.bind(this);
+    this.sendPrevious = this.sendPrevious.bind(this);
 
   }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Internal Methods
+* Methods
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-  _spitCode = () => {
-    console.log(this.state.code);
+
+  setAppToken = (response) => this.setState({ appToken: response });
+
+  connectServer() {
+    const { code } = this.state;
+    axios.post('http://localhost:3000/screen/connect',{
+      "code": code,
+      "eventId":1
+    })
+      .then(response => this.setAppToken(response.data) )
+      .catch(error => console.log(error));
+  }
+
+  sendStart() {
+    const { appToken } = this.state;
+    console.log(appToken);
+    axios.post('http://localhost:3000/screen/control',{
+      "appToken": appToken,
+      "action": 'start'
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  }
+
+  sendPause() {
+    const { appToken } = this.state;
+    axios.post('http://localhost:3000/screen/control',{
+      "appToken": appToken,
+      "action": 'pause'
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  }
+
+  sendNext() {
+    const { appToken } = this.state;
+    axios.post('http://localhost:3000/screen/control',{
+      "appToken": appToken,
+      "action": 'next'
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+  }
+
+  sendPrevious() {
+    const { appToken } = this.state;
+    axios.post('http://localhost:3000/screen/control',{
+      "appToken": appToken,
+      "action": 'previous'
+    })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
   }
 
   render() {
 
     // declare to be used in render
-    const { code } = this.state;
+    const { code, appToken, action } = this.state;
 
     return (
       <View style={Style.center}>
-        // text input + button - TODO: Make into a component
         <View style={[Style.center,Style.section]}>
           <TextInput
             style={[Style.textInput,Style.eventCode]}
@@ -60,11 +118,47 @@ export default class ConnectionInput extends Component {
         <View style={[Style.center,Style.section]}>
           <TouchableHighlight 
             style={Style.button}
-            onPress={this._spitCode}
+            onPress={this.connectServer.bind()}
           >
             <Text style={Style.buttonText}>Connect</Text>
           </TouchableHighlight>
         </View>
+
+        <View style={[Style.center,Style.row]}>
+
+          <TouchableHighlight 
+            style={Style.button}
+            onPress={this.sendStart}
+          >
+            <Text style={Style.buttonText}>Start</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight 
+            style={Style.button}
+            onPress={this.sendPause}
+          >
+            <Text style={Style.buttonText}>Pause</Text>
+          </TouchableHighlight>
+
+          <View style={Style.row}>
+            <TouchableHighlight 
+              style={Style.button}
+              onPress={this.sendNext}
+            >
+              <Text style={Style.buttonText}>Next</Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight 
+              style={Style.button}
+              onPress={this.sendPrevious}
+            >
+              <Text style={Style.buttonText}>Previous</Text>
+            </TouchableHighlight>
+          </View>
+
+
+        </View>
+
       </View>
     );
   }
