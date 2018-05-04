@@ -26,6 +26,7 @@ func main() {
 	http.HandleFunc("/ws", handlerWs)
 
 	http.HandleFunc("/event", handlerEvents)
+	http.HandleFunc("/ping", handlerPing)
 	http.HandleFunc("/screen/connect", handlerScreenConnect)
 	http.HandleFunc("/screen/control", handlerScreenControl)
 
@@ -37,6 +38,10 @@ func main() {
 }
 
 /* H A N D L E R S */
+
+func handlerPing(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(`Pong`))
+}
 
 func handlerEvents(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
