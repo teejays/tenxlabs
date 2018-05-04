@@ -183,7 +183,7 @@ func handlerScreenConnect(w http.ResponseWriter, r *http.Request) {
 	appTokenScreenCodeMapLock.Unlock()
 
 	// send the event data to the screen
-	err = sendWsDataByCode(params.Code, WsMessage{"Event", event})
+	err = sendWsDataByCode(params.Code, WsMessage{"EventData", event})
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -237,12 +237,21 @@ func handlerScreenControl(w http.ResponseWriter, r *http.Request) {
 	switch params.Action {
 	case "start":
 		wsMessage.MessageType = "Start"
+	case "end":
+		wsMessage.MessageType = "End"
 	case "pause":
 		wsMessage.MessageType = "Pause"
 	case "resume":
 		wsMessage.MessageType = "Resume"
 	case "next":
 		wsMessage.MessageType = "Next"
+	case "previous":
+		wsMessage.MessageType = "Previous"
+	default:
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Unrecognized action " + params.Action))
+		return
+
 	}
 
 	// send the ws message
@@ -311,7 +320,7 @@ func handlerWs(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Opened WS: %s\n", code)
 
 		// send the unique code to web client
-		err := sendWsDataByConn(conn, WsMessage{"UniqueCode", code})
+		err := sendWsDataByConn(conn, WsMessage{"ScreenCode", code})
 		if err != nil {
 			fmt.Println(err)
 		}
