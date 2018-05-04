@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Communication.js
+* Connection.js
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import React, { Component } from 'react';
@@ -11,13 +11,16 @@ import {
     Button
 } from 'react-native';
 
-export default class Communication extends Component {
+export default class Connection extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        console.log(props);
 
         this.state = {
-            open: false
+            open: false,
+            code: props.code
         };
         this.socket = new WebSocket('ws://echo.websocket.org/');
         this.emit = this.emit.bind(this);
@@ -51,6 +54,10 @@ export default class Communication extends Component {
             borderRadius: 40,
             justifyContent: 'space-between'
         }
+
+        const { code } = this.state;
+
+        console.log(code);
 
         return (
             <View style={styles.container}>

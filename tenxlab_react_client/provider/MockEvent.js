@@ -60,9 +60,9 @@ class TimerEvent {
 }
 
 class Person {
-	constructor(name, uid){
+	constructor(name, id){
 		this.name = name;
-		this.uid = uid;
+		this.id = id;
 	}
 }
 
