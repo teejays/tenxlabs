@@ -16,8 +16,6 @@ export default class Connection extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props);
-
         this.state = {
             open: false,
             code: props.code
