@@ -24,8 +24,9 @@ func main() {
 	}
 
 	// set the webserver
-	var serverAddress string = ":3000"
-	flag.StringVar(&serverAddress, "server address", ":3000", "(optional) Provide the address where the web server should listen")
+	var serverAddress string = ""
+	flag.StringVar(&serverAddress, "server", ":3000", "(optional) Provide the address where the web server should listen")
+	flag.Parse()
 
 	http.HandleFunc("/ws", handlerWs)
 
@@ -34,7 +35,7 @@ func main() {
 	http.HandleFunc("/screen/connect", handlerScreenConnect)
 	http.HandleFunc("/screen/control", handlerScreenControl)
 
-	fmt.Println("Listening for requests..")
+	fmt.Printf("Listening for requests on %s\n", serverAddress)
 	err = http.ListenAndServe(serverAddress, nil)
 	if err != nil {
 		panic("ListenAndServe: " + err.Error())

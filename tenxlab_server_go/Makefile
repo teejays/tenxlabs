@@ -8,4 +8,4 @@ clean:
 build:
 	$(GOBUILD) -o $(BINARY_NAME)
 run: build
-	./$(BINARY_NAME)
+	./$(BINARY_NAME) -server="$(SERVER)"
