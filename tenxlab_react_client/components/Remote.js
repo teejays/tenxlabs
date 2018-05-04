@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* TenXRemote
+* Remote
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import React, { Component } from 'react';
@@ -20,7 +20,7 @@ import Style from './Style';
 * Remote Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default class TenXRemote extends Component {
+export default class Remote extends Component {
   
   constructor (props) {
     super(props);

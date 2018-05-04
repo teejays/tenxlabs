@@ -1,3 +1,7 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* ControlScreen.js -- probably won't be used
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 import React, { Component } from 'react';
 import {
   View,
@@ -5,7 +9,7 @@ import {
   Text
 } from 'react-native';
 import Style from './Style'
-import TenXRemote from './TenXRemote'
+import Remote from './Remote'
 
 
 export default class ControlScreen extends Component {
@@ -17,7 +21,7 @@ export default class ControlScreen extends Component {
           resizeMode={'contain'}
           source={require('../images/nextjump.png')}
         />
-        <TenXRemote/>
+        <Remote/>
       </View>
     )
   }

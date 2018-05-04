@@ -11,6 +11,7 @@ import DetailScreen from './components/DetailScreen'
 import SetUpScreen from './components/SetUpScreen'
 import ControlScreen from './components/ControlScreen'
 import LaunchScreen from './components/LaunchScreen'
+import EventScreen from './components/EventScreen'
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Root Component
@@ -47,9 +48,12 @@ const RootStack = StackNavigator({
   },
   Control:{
     screen: ControlScreen,
+  },
+  Event:{
+    screen: EventScreen,
   }
 },
 {
-  initialRouteName: 'Launch',
+  initialRouteName: 'Event',
 }
 );
