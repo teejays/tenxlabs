@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* Form
+* TenXForm
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import React, { Component } from 'react';
@@ -9,10 +9,13 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
+  ScrollView,
   View,
   Button,
   ListView,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
+  Slider
 } from 'react-native';
 import Style from './Style'
 import ValidationComponent from 'react-native-form-validator'
@@ -39,18 +42,20 @@ export default class TenXForm extends ValidationComponent {
       participants: [],
       judgeInput: "",
       judges: [],
-      isDateTimePickerVisible: false
+      isDateTimePickerVisible: false,
+      date: new Date(),
+      duration: 60
     };
 
   }
 
   // setters?
-  _setDateTime = (datetime) => this.setState({ eventDatetime: datetime });
   _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
   _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+  _setDateTime = (datetime) => this.setState({ date: datetime });
 
   _handleDatePicked = (date) => {
-    console.log(date);
+    console.log(date)
     this._hideDateTimePicker();
   };
 
@@ -66,32 +71,104 @@ export default class TenXForm extends ValidationComponent {
     judges.push(judgeInput);
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
+  _setTenX = (type) => this.setState({ eventName: type + ' 10x' });
 
-        <Text style={Style.h1}>
-          SET UP 10X
-          {'\n'}
-        </Text>
+  _change(value) {
+    this.setState(() => {
+      return {
+        duration: parseFloat(value),
+      };
+    });
+  }
+
+  render() {
+
+    const {
+      duration,
+      eventName,
+      participantInput,
+      participants,
+      judgeInput,
+      judges,
+      date,
+      isDateTimePickerVisible,
+      eventDatetime
+    } = this.state;
+
+    return (
+      <ScrollView style={Style.scrollScreen}>
+
+        <View style={Style.center}>
+          <Text style={Style.h1}>
+            SET UP 10X
+            {'\n'}
+          </Text>
+        </View>
+
+        <View style={Style.center}>
+          <View style={Style.row}>
+              <Image
+                style={Style.iconCircle}
+                resizeMode={'contain'}
+                source={require('../images/icon-revenue.png')}
+              />
+              <Image
+                style={Style.iconCircle}
+                resizeMode={'contain'}
+                source={require('../images/icon-leadership.png')}
+              />
+              <Image
+                style={Style.iconCircle}
+                resizeMode={'contain'}
+                source={require('../images/icon-product.png')}
+              />
+          </View>
+
+          <View style={Style.row}>
+              <Image
+                style={Style.iconCircle}
+                resizeMode={'contain'}
+                source={require('../images/icon-sales.png')}
+              />
+              <Image
+                style={Style.iconCircle}
+                resizeMode={'contain'}
+                source={require('../images/icon-engineering.png')}
+              />
+          </View>
+        </View>
+
+        <View style={Style.center}>
+          <Text>Duration</Text>
+          <Slider
+            step={1}
+            maximumValue={parseInt(100)}
+            onValueChange={this._change.bind(this)}
+            value={duration}
+          />
+          <Text>{duration} minutes</Text>
+        </View>
+
+        <View style={Style.center}>
+          <TouchableOpacity onPress={this._showDateTimePicker}>
+            <Text>When is the event?</Text>
+          </TouchableOpacity>
+          <DateTimePicker
+            isVisible={isDateTimePickerVisible}
+            onConfirm={this._handleDatePicked}
+            onCancel={this._hideDateTimePicker}
+            mode="datetime"
+          />
+          <Text>{ date.toString() }</Text>
+        </View>
 
         <Text>Name of Event:</Text>
         <TextInput
           style={Style.textInput}
           ref="eventName"
           onChangeText={(eventName) => this.setState({eventName})} 
-          value={this.state.eventName} />
+          value={eventName} />
         <Text>{'\n'}</Text>
-
-        <TouchableOpacity onPress={this._showDateTimePicker}>
-          <Text>When is the event?</Text>
-        </TouchableOpacity>
-        <DateTimePicker
-          isVisible={this.state.isDateTimePickerVisible}
-          onConfirm={this._handleDatePicked}
-          onCancel={this._hideDateTimePicker}
-          mode="datetime"
-        />
 
         <Text>{'\n'}</Text>
 
@@ -100,7 +177,7 @@ export default class TenXForm extends ValidationComponent {
           style={Style.textInput} 
           ref="participantInput" 
           onChangeText={(participantInput) => this.setState({participantInput})} 
-          value={this.state.participantInput} />
+          value={participantInput} />
 
         <Text>{'\n'}</Text>
 
@@ -109,7 +186,7 @@ export default class TenXForm extends ValidationComponent {
           style={Style.textInput} 
           ref="judgeInput" 
           onChangeText={(judgeInput) => this.setState({judgeInput})} 
-          value={this.state.judgeInput} />
+          value={judgeInput} />
 
         <Text>{'\n'}</Text>
 
@@ -121,29 +198,21 @@ export default class TenXForm extends ValidationComponent {
 
         <Text> 
           Event Name:{'\n'}
-           {this.state.eventName}{'\n'}{'\n'}
-           {this.state.eventDatetime}{'\n'}{'\n'}
+           {eventName}{'\n'}{'\n'}
+           {eventDatetime}{'\n'}{'\n'}
           Presenters: {'\n'}
-           {this.state.participants.map(
+           {participants.map(
             function(object, key) {
               return <Text>{key+1}) {object}{'\n'}</Text>
             })}{'\n'}{'\n'}
           Judges: {'\n'}
-           {this.state.judges.map(
+           {judges.map(
             function(object, key) {
               return <Text>{key+1}) {object}{'\n'}</Text>
             })}
         </Text>
 
-      </View>
+      </ScrollView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});

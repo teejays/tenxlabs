@@ -9,6 +9,7 @@ import { StackNavigator } from 'react-navigation';
 import HomeScreen from './components/HomeScreen'
 import DetailScreen from './components/DetailScreen'
 import SetUpScreen from './components/SetUpScreen'
+import LaunchScreen from './components/LaunchScreen'
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Root Component
@@ -25,8 +26,17 @@ export default class App extends Component {
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 const RootStack = StackNavigator({
+  Launch: {
+    screen: LaunchScreen,
+  },
   Home: {
     screen: HomeScreen,
+    navigationOptions: {
+      title: "Home Screen",
+      header: {
+        left: null,
+      }
+    }
   },
   Details: {
     screen: DetailScreen,
@@ -36,6 +46,6 @@ const RootStack = StackNavigator({
   },
 },
 {
-  initialRouteName: 'Home',
+  initialRouteName: 'Launch',
 }
 );
