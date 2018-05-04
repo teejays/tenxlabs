@@ -1,8 +1,6 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* SetUpScreen.js
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import React, { Component } from 'react';
 import {
@@ -10,13 +8,13 @@ import {
   View,
   Button
 } from 'react-native';
-import TenXForm from './TenXForm'
+import Form from './Form'
 
 export default class SetUpScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <TenXForm/>
+      <Form/>
         <Button
           title="Go to Home"
           onPress={() => this.props.navigation.goBack()}

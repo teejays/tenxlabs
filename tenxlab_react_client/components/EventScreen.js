@@ -1,3 +1,7 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* EventScreen.js
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 import React, { Component } from 'react';
 import {
   View,
@@ -9,14 +13,16 @@ import {
 } from 'react-native';
 import Style from './Style'
 import Moment from 'moment'
-import TenXRemote from './TenXRemote'
+import Remote from './Remote'
 import TenXEvents from '../provider/MockEvent'
 import CapitalizedText from './CapitalizedText'
 
 
 export default class EventScreen extends Component {
 
-  // constructor
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Constructor
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
   constructor (props) {
     super(props);
     
@@ -28,16 +34,22 @@ export default class EventScreen extends Component {
 
   }
 
-  // internal methods
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Internal Methods
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
   _spitCode = () => {
     console.log(this.state.code);
   }
 
   render () {
+
+    // declare to be used in render
     const { event, code } = this.state;
 
     return (
       <ScrollView style={Style.scrollScreen}>
+
+        // title
         <View style={Style.center}>
           <CapitalizedText style={Style.h1}>{event.type + ' 10x'}</CapitalizedText>
           <Text>
@@ -45,6 +57,7 @@ export default class EventScreen extends Component {
           </Text>
         </View>
 
+        // presenters
         <View style={[Style.center, Style.row]}>
           <Text>
             Presenters
@@ -60,6 +73,7 @@ export default class EventScreen extends Component {
             })}
         </View>
 
+        // judges
         <View style={[Style.center, Style.row]}>
           <Text>
             Judges
@@ -75,6 +89,7 @@ export default class EventScreen extends Component {
             })}
         </View>
 
+        // text input + button - TODO: Make into a component
         <View style={[Style.center,Style.section]}>
           <TextInput
             style={[Style.textInput,Style.eventCode]}

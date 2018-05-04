@@ -1,11 +1,16 @@
 
-// Ease of whatever
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Colors and Fonts - collated for ease of changing
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 var mainColor = '#e6e6e6';
 var secondColor = '#A9A9A9';
 
 var Style = {
 
-// Global Styling
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Global Styling
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	screen:{
 		flex: 1,
     	justifyContent: 'center',
@@ -48,14 +53,18 @@ var Style = {
 		//color: 'white'
 	},
 
-// Font
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Font
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	h1:{
 		fontSize: 24,
 		fontWeight: 'bold',
 		marginTop: 15
 	},
 
-// Remote
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Control
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	remoteButton: {
 		width: 100,
 	    height: 60,
@@ -66,7 +75,9 @@ var Style = {
 	    margin: 5
 	},
 
-// Event
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Event
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	eventIcon: {
 		width: 75,
 		height: 75,

@@ -1,18 +1,18 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-* TenXForm
+* Form.js
+
+* TODO: Make this comprise of more components for ease of use
+
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 import React, { Component } from 'react';
 import {
-  Platform,
-  StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   ScrollView,
   View,
   Button,
-  ListView,
   TouchableOpacity,
   Image,
   Slider
@@ -30,7 +30,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 * Form Component
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-export default class TenXForm extends ValidationComponent {
+export default class Form extends ValidationComponent {
   
   constructor (props) {
     super(props);
@@ -49,7 +49,10 @@ export default class TenXForm extends ValidationComponent {
 
   }
 
-  // setters?
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Internal Methods
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
   _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
   _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
   _setDateTime = (datetime) => this.setState({ date: datetime });
@@ -83,6 +86,7 @@ export default class TenXForm extends ValidationComponent {
 
   render() {
 
+    // declare to be used in render
     const {
       duration,
       eventName,
@@ -98,6 +102,7 @@ export default class TenXForm extends ValidationComponent {
     return (
       <ScrollView style={Style.scrollScreen}>
 
+        // title
         <View style={Style.center}>
           <Text style={Style.h1}>
             SET UP 10X
@@ -105,6 +110,7 @@ export default class TenXForm extends ValidationComponent {
           </Text>
         </View>
 
+        // type of 10x
         <View style={Style.center}>
           <View style={Style.row}>
               <Image
@@ -138,6 +144,7 @@ export default class TenXForm extends ValidationComponent {
           </View>
         </View>
 
+        // duration
         <View style={Style.center}>
           <Text>Duration</Text>
           <Slider
@@ -149,6 +156,7 @@ export default class TenXForm extends ValidationComponent {
           <Text>{duration} minutes</Text>
         </View>
 
+        // datetime
         <View style={Style.center}>
           <TouchableOpacity onPress={this._showDateTimePicker}>
             <Text>When is the event?</Text>
