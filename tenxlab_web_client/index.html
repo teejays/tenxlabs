@@ -9,7 +9,9 @@
 	</head>
 
 	<body>
-		<div id="unique-code">
+		<div id="unique-code-container">
+			<div>Enter the following code on your app</div>
+			<div id="unique-code"></div>
 		</div>
 		<div id="main-container">
 
@@ -135,17 +137,27 @@
 			}
 			this.socket.onmessage = function(event) {
 				data = JSON.parse(event.data);
-				console.log(data);
 				if (data && data.MessageType){
 					switch(data.MessageType){
 						case "UniqueCode":
 							tenxApp.Webclient.setUniqueCode(data.Message);
-							//comment out later
-							tenxApp.Webclient.hideUniqueCode();
 							break;
-						case "Events":
+						case "Event":
 							tenxApp.Webclient.hideUniqueCode();
 							tenxApp.Webclient.eventData = tenxApp.Webclient.getEventData(data.Message);
+							// set up the web app to support the event
+							tenxApp.Webclient.setEventName(tenxApp.Webclient.eventData.name);
+							// normally, we would start from the first subevent, unless the user explicitly asks us not to by providing url params
+							var overwriteSubEventId = tenxApp.Webclient.getUrlParameterByName("subEventId");
+							if (!isNaN(overwriteSubEventId) && overwriteSubEventId != null) {
+								tenxApp.Webclient.currentSubEventId = overwriteSubEventId;
+							}
+							var overwriteTimerEventId = tenxApp.Webclient.getUrlParameterByName("timerEventId");
+							if (!isNaN(overwriteTimerEventId) && overwriteTimerEventId != null) {
+								tenxApp.Webclient.currentTimerEventId = overwriteTimerEventId;
+							}
+							// set the starting timer event
+							tenxApp.Webclient.setCurrentTimerEvent();
 							break;
 						case "Start":
 							tenxApp.Webclient.beginCurrentTimerEvent();
@@ -162,25 +174,6 @@
 					}
 				}
 			}
-			// get the 10x event info
-			this.eventData = pullEventById(1);
-
-			// normally, we would start from the first subevent, unless the user explicitly asks us not to by providing url params
-			var overwriteSubEventId = this.getUrlParameterByName("subEventId");
-			if (!isNaN(overwriteSubEventId) && overwriteSubEventId != null) {
-				this.currentSubEventId = overwriteSubEventId;
-			}
-			var overwriteTimerEventId = this.getUrlParameterByName("timerEventId");
-			if (!isNaN(overwriteTimerEventId) && overwriteTimerEventId != null) {
-				this.currentTimerEventId = overwriteTimerEventId;
-			}
-
-			// set up the web app to support the event
-			this.setEventName(this.eventData.name);
-
-			// set the starting timer event
-			this.setCurrentTimerEvent();
-			
 		},
 
 		getCurrentSubEvent: function() {
@@ -255,15 +248,59 @@
 		getEventData: function(data){
 			var eventdata = new Object();
 			eventdata.type = data.EventType;
-			eventdata.name = data.EventName;
+			eventdata.name = data.Name;
 			eventdata.datetime = data.DatetimeStart;
-			eventdata.duration = data.EventDuration;
+			eventdata.duration = data.EventDuration / 1000000000;
 			eventdata.presenters = data.Presenters;
 			eventdata.judges = data.Judges;
-			eventdata.presentationTime = data.PresentationDuration;
-			eventdata.audienceFeedbackTime = data.AudienceFeedbackDuration;
-			eventdata.judgeFeedbackTime = data.JudgeFeedbackDuration;
-			eventdata.subEvents = data.SubEvents;
+			eventdata.presentationTime = data.PresentationDuration / 1000000000;
+			eventdata.audienceFeedbackTime = data.AudienceFeedbackDuration / 1000000000;
+			eventdata.judgeFeedbackTime = data.JudgeFeedbackDuration / 1000000000;
+
+			eventdata.subEvents = new Array();
+			for (var i = 0, len = data.SubEvents.length; i < len; i++){
+				var subEvent = this.getSubEventData(data.SubEvents[i]);
+				eventdata.subEvents.push(subEvent);
+			}
+			
+			return eventdata;
+		},
+
+		getSubEventData: function(subEventData){
+			var subevent = new Object();
+			//temp person obj to put in info
+			subevent.presenter = new Object();
+			//presenter
+			subevent.presenter.id = subEventData.Presenter.Id;
+			subevent.presenter.name = subEventData.Presenter.Name;
+			
+			//judges
+			subevent.judges = new Array();
+			for (var i = 0, len = subEventData.Judges.length; i < len; i++){
+				var judge = new Object();
+				judge.id = subEventData.Judges[i].Id;
+				judge.name = subEventData.Judges[i].Name;
+				subevent.judges.push(judge);
+			}
+
+			subevent.presentationTime = subEventData.PresentationDuration / 1000000000;
+			subevent.audienceFeedbackTime = subEventData.AudienceFeedbackDuration / 1000000000;
+			subevent.judgeFeedbackTime = subEventData.JudgeFeedbackDuration / 1000000000;
+
+			subevent.timerEvents = new Array();
+			for (var i = 0, len = subEventData.TimerEvents.length; i < len; i++){
+				subevent.timerEvent = this.getTimerEventData(subEventData.TimerEvents[i]);
+				subevent.timerEvents.push(subevent.timerEvent);
+			}
+			return subevent;
+		},
+
+		getTimerEventData: function(timerEventData){
+			var timerevent = new Object();
+			timerevent.type = timerEventData.ActivityType;
+			timerevent.description = timerEventData.Title;
+			timerevent.time = timerEventData.Duration / 1000000000;
+			return timerevent;
 		}
 
 	};
@@ -271,143 +308,6 @@
 window.onload = function() {
 	console.log("DOM loaded...");
 	tenxApp.Webclient.init();
-}
-
-pullEventById = function (id) {
-	mockEvent = {
-	   "type":"skills",
-	   "name":"May Skills 10X",
-	   "datetime":"2018-05-05 09:00:00",
-	   "duration":3600,
-	   "presenters":[
-	      "Abhay Sesha",
-	      "Supriya Mishra",
-	      "Darell Platz"
-	   ],
-	   "judges":[
-	      "Tom Fuller",
-	      "Xuelan Zhang",
-	      "Nayan Busa"
-	   ],
-	   "presentationTime":300,
-	   "audienceFeedbackTime":120,
-	   "judgeFeedbackTime":120,
-	   "subEvents":[
-	      {
-	         "presenter":"Abhay Sesha",
-	         "judges":[
-	            "Tom Fuller",
-	            "Xuelan Zhang",
-	            "Nayan Busa"
-	         ],
-	         "presentationTime":300,
-	         "judgeFeedbackTime":120,
-	         "timerEvents":[
-	            {
-	               "type":"Presentation",
-	               "description":"Abhay Sesha",
-	               "time":300
-	            },
-	            {
-	               "type":"Feedback",
-	               "description":"Audience",
-	               "time":10
-	            },
-	            {
-	               "type":"Judge Feedback",
-	               "description":"Tom Fuller",
-	               "time":10
-	            },
-	            {
-	               "type":"Judge Feedback",
-	               "description":"Xuelan Zhang",
-	               "time":10
-	            },
-	            {
-	               "type":"Judge Feedback",
-	               "description":"Nayan Busa",
-	               "time":10
-	            }
-	         ]
-	      },
-	      {
-	         "presenter":"Supriya Mishra",
-	         "judges":[
-	            "Tom Fuller",
-	            "Xuelan Zhang",
-	            "Nayan Busa"
-	         ],
-	         "presentationTime":300,
-	         "judgeFeedbackTime":120,
-	         "timerEvents":[
-	            {
-	               "type":"presentation",
-	               "description":"Supriya Mishra",
-	               "time":300
-	            },
-	            {
-	               "type":"audience feedback",
-	               "description":"",
-	               "time":120
-	            },
-	            {
-	               "type":"judge feedback",
-	               "description":"Tom Fuller",
-	               "time":120
-	            },
-	            {
-	               "type":"judge feedback",
-	               "description":"Xuelan Zhang",
-	               "time":120
-	            },
-	            {
-	               "type":"judge feedback",
-	               "description":"Nayan Busa",
-	               "time":120
-	            }
-	         ]
-	      },
-	      {
-	         "presenter":"Darell Platz",
-	         "judges":[
-	            "Tom Fuller",
-	            "Xuelan Zhang",
-	            "Nayan Busa"
-	         ],
-	         "presentationTime":300,
-	         "judgeFeedbackTime":120,
-	         "timerEvents":[
-	            {
-	               "type":"presentation",
-	               "description":"Darell Platz",
-	               "time":300
-	            },
-	            {
-	               "type":"audience feedback",
-	               "description":"",
-	               "time":120
-	            },
-	            {
-	               "type":"judge feedback",
-	               "description":"Tom Fuller",
-	               "time":120
-	            },
-	            {
-	               "type":"judge feedback",
-	               "description":"Xuelan Zhang",
-	               "time":120
-	            },
-	            {
-	               "type":"judge feedback",
-	               "description":"Nayan Busa",
-	               "time":120
-	            }
-	         ]
-	      }
-	   ]
-	}
-	
-	return mockEvent;
 }
 
 </script>
