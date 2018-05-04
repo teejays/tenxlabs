@@ -27,6 +27,9 @@ func main() {
 	var serverAddress string = ""
 	flag.StringVar(&serverAddress, "server", ":3000", "(optional) Provide the address where the web server should listen")
 	flag.Parse()
+	if serverAddress == "" {
+		serverAddress = ":3000"
+	}
 
 	http.HandleFunc("/ws", handlerWs)
 
