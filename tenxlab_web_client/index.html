@@ -38,23 +38,28 @@
 
 	tenxApp.Timer = {
 		total_seconds: null,
+		remaining_seconds: null,
+		is_running: false,
 
 		setTimerSeconds: function(secs) {
 			this.total_seconds = secs;
+			this.remaining_seconds = secs;
 			this.updateTimerSeconds();
 		},
 
 		updateTimerSeconds: function() {  
-  			var minutes = Math.floor((this.total_seconds % (1000 * 60 * 60)) / (60));
-  			var seconds = Math.floor((this.total_seconds % (60)));	
+  			var minutes = Math.floor((this.remaining_seconds % (1000 * 60 * 60)) / (60));
+  			var seconds = Math.floor((this.remaining_seconds % (60)));	
 
 			$("#timer-countdown #timer-time").html(minutes + "m " + seconds + "s ");
+			this.updateProgressBar(this.remaining_seconds, this.total_seconds, $('#timer-progress-bar'));
 		},
 
 		decrementTimer: function() {
-			if (this.total_seconds > 0) {
-				this.total_seconds -= 1;
+			if (this.remaining_seconds > 0) {
+				this.remaining_seconds -= 1;
 				this.updateTimerSeconds();
+				this.updateProgressBar(this.remaining_seconds, this.total_seconds, $('#timer-progress-bar'));
 			}
 		},
 
@@ -66,36 +71,45 @@
 			$("#timer-countdown").removeClass("times-up");
 		},
 
-		pauseTimer: function() {
-			clearInterval(this.interval);
-			delete this.interval;
+		beginTimer: function() {
+			this.removeFlashTime()
+			this.startTimer();
 		},
 
 		startTimer: function() {
-			this.removeFlashTime()
-			this.progress(this.total_seconds, this.total_seconds, $('#timer-progress-bar'));
+			this.is_running = true;
 			var self = this;
 			this.interval = setInterval(function() {
-				if (self.total_seconds > 0) {
+				if (self.remaining_seconds > 0) {
 					self.decrementTimer();
 				} else {
 					self.pauseTimer();
 					self.startFlashTime();
+					// go to the next event
 					setTimeout(function(){ tenxApp.Webclient.nextTimerEvent(); }, 3000);
 				}
 
 			}, 1000);
 		},
 
-		progress: function(timeleft, timetotal, $element) {
+		pauseTimer: function() {
+			if (this.is_running) {
+				clearInterval(this.interval);
+				this.is_running = false;
+			}
+		},
+
+		resumeTimer: function() {
+			if (!this.is_running) {
+				this.startTimer();
+				this.is_running = true;
+			}
+		},
+
+		updateProgressBar: function(timeleft, timetotal, $element) {
 			var self = this;
 			var progressBarWidth = timeleft * $element.width() / timetotal;
     		$element.find('div').animate({ width: progressBarWidth }, 500).html(Math.floor(timeleft/60) + ":"+ timeleft%60);
-    		if(timeleft > 0) {
-        		setTimeout(function() {
-            		self.progress(timeleft - 1, timetotal, $element);
-        		}, 1000);
-    		}
 		},
 	};
 
@@ -131,9 +145,8 @@
 			// set up the web app to support the event
 			this.setEventName(this.eventData.name);
 
-			// start from first timer event
-			this.beginCurrentTimerEvent();
-
+			// set the starting timer event
+			this.setCurrentTimerEvent();
 			
 		},
 
@@ -161,14 +174,17 @@
 			}
 		},
 
-		beginCurrentTimerEvent: function() {
-			
+		setCurrentTimerEvent: function() {
 			var timerEvent = this.getCurrentTimerEvent();
 			$("#timer-info-activity").html(timerEvent.type);
 			$("#timer-info-title").html(timerEvent.description);
 
 			tenxApp.Timer.setTimerSeconds(timerEvent.time);
-			tenxApp.Timer.startTimer();
+		},
+
+		beginCurrentTimerEvent: function() {
+			this.setCurrentTimerEvent();
+			tenxApp.Timer.beginTimer();
 		},
 
 		nextTimerEvent: function() {
