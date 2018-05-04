@@ -15,20 +15,20 @@ var Style = {
 		flex: 1,
 		backgroundColor: mainColor
 	},
+	section:{
+		marginTop: 20,
+		marginBottom: 20
+	},
 	center:{
 		justifyContent: 'center',
     	alignItems: 'center',
     	marginTop: 10
 	},
-	h1:{
-		fontSize: 24,
-		fontWeight: 'bold',
-		marginTop: 15
-	},
 	textInput:{
 		borderBottomColor: 'black',
 		borderBottomWidth: 2,
-		width: 200
+		width: 200,
+		textAlign: 'center'
 	},
 	row:{
 		flexDirection: 'row'
@@ -51,8 +51,23 @@ var Style = {
 	    textAlign: 'center',
 	    padding: 20,
 	    margin: 5
+	},
+
+// Event
+	eventIcon: {
+		width: 75,
+		height: 75,
+		borderRadius: 75/2,
+		margin: 5
+	},
+	eventCode: {
+		fontSize: 32,
 	}
 
 };
+
+var Font = {
+
+}
 
 export default Style;

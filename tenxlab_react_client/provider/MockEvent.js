@@ -59,11 +59,28 @@ class TimerEvent {
 	}	
 }
 
-var mockEvent1 = new TenXEvent("skills", "May Skills 10X", "2018-05-05 09:00:00", 3600, ["Abhay Sesha", "Supriya Mishra", "Darell Platz"], ["Tom Fuller", "Xuelan Zhang", "Nayan Busa"], 300, 120, 120);
+class Person {
+	constructor(name, uid){
+		this.name = name;
+		this.uid = uid;
+	}
+}
 
-var TexXEvents = [mockEvent1];
+var abhay = new Person("Abhay Sesha", "67713173");
+var supriya = new Person("Supriya Mishra", "67894438");
+var darrell = new Person("Darell Platz", "79149169");
+var tom = new Person("Tom Fuller", "1091147");
+var xuelan = new Person("Xuelan Zhang", "45423186");
+var nayan = new Person("Nayan Busa", "21046359");
 
-export default TexXEvents;
+var mockEvent1 = new TenXEvent("skills", "May Skills 10X", "2018-05-05 09:00:00", 3600, [abhay, supriya, darrell], [tom, xuelan, nayan], 300, 120, 120);
+
+var TenXEvents = [mockEvent1];
+
+export default TenXEvents;
+
+
+
 
 
 
