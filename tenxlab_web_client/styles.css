@@ -1,4 +1,4 @@
-#main-container {
+#main-container, #unique-code-container {
 	height: 100%;
 	width: 100%;
 	background: #C0C0C0;
@@ -9,11 +9,9 @@
 	
 	flex-direction: column;
 	justify-content: center;
-
-	display: none;
 }
 
-#event-name {
+#event-name, #unique-code-text{
 	font-size: 4em;	
 }
 
