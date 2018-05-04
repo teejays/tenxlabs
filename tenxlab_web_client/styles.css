@@ -1,0 +1,73 @@
+#main-container {
+	height: 100%;
+	width: 100%;
+	background: #C0C0C0;
+	text-align: center;
+	padding: 40px;
+
+	font-family: 'Montserrat', sans-serif;
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+#event-name {
+	font-size: 4em;	
+}
+
+#timer-countdown {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: baseline;
+	
+	margin-top: 150px;
+	margin-bottom: 100px; 
+	color: black;
+	font-family: 'Roboto Mono', monospace;
+}
+
+#timer-countdown.times-up {
+	color: red;
+}
+
+#timer-countdown #timer-time {
+	font-size: 16em;
+	font-weight: bold;
+}
+
+#timer-countdown #timer-unit {
+	font-size: 6em;
+}
+
+#timer-event-description {
+	font-size: 4em;
+}
+
+#timer-info-activity {
+	font-style: italic;
+	font-size: 2em;
+}
+
+#timer-info-title {
+	font-size: 4em;
+	font-weight: bold;
+}
+
+#timer-progress-bar {
+  width: 90%;
+  margin: 30px auto;
+  height: 22px;
+  background-color: lightgray;
+}
+
+#timer-progress-bar div {
+  height: 100%;
+  text-align: right;
+  padding: 0 10px;
+  line-height: 22px; /* same as #timer-progress-bar height if we want text middle aligned */
+  width: 0;
+  background-color: #0A5F44;
+  box-sizing: border-box;
+}

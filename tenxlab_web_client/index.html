@@ -1,0 +1,341 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="styles.css" type="text/css" />
+		<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto+Mono" rel="stylesheet">
+		<!-- JQuery -->
+		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+
+	</head>
+
+	<body>
+		<div id="main-container">
+
+			<div id="event-name"></div>
+
+			<div id="timer-countdown">
+				<div id="timer-time"></div>
+
+				<div id="timer-unit">s</div>
+
+			</div>
+
+			<div id="timer-info">
+				<div id="timer-info-activity"></div>
+				<div id="timer-info-title"></div>
+			</div>
+
+			<div id="timer-progress-bar">
+			  	<div class="bar"></div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script type="text/javascript">
+
+	var tenxApp = tenxApp || window.Object; 
+
+	tenxApp.Timer = {
+		total_seconds: null,
+
+		setTimerSeconds: function(secs) {
+			this.total_seconds = secs;
+			this.updateTimerSeconds();
+		},
+
+		updateTimerSeconds: function() {  
+  			var minutes = Math.floor((this.total_seconds % (1000 * 60 * 60)) / (60));
+  			var seconds = Math.floor((this.total_seconds % (60)));	
+
+			$("#timer-countdown #timer-time").html(minutes + "m " + seconds + "s ");
+		},
+
+		decrementTimer: function() {
+			if (this.total_seconds > 0) {
+				this.total_seconds -= 1;
+				this.updateTimerSeconds();
+			}
+		},
+
+		startFlashTime: function() {
+			$("#timer-countdown").addClass("times-up");
+		},
+
+		removeFlashTime: function() {
+			$("#timer-countdown").removeClass("times-up");
+		},
+
+		pauseTimer: function() {
+			clearInterval(this.interval);
+			delete this.interval;
+		},
+
+		startTimer: function() {
+			this.removeFlashTime()
+			this.progress(this.total_seconds, this.total_seconds, $('#timer-progress-bar'));
+			var self = this;
+			this.interval = setInterval(function() {
+				if (self.total_seconds > 0) {
+					self.decrementTimer();
+				} else {
+					self.pauseTimer();
+					self.startFlashTime();
+					setTimeout(function(){ tenxApp.Webclient.nextTimerEvent(); }, 3000);
+				}
+
+			}, 1000);
+		},
+
+		progress: function(timeleft, timetotal, $element) {
+			var self = this;
+			var progressBarWidth = timeleft * $element.width() / timetotal;
+    		$element.find('div').animate({ width: progressBarWidth }, 500).html(Math.floor(timeleft/60) + ":"+ timeleft%60);
+    		if(timeleft > 0) {
+        		setTimeout(function() {
+            		self.progress(timeleft - 1, timetotal, $element);
+        		}, 1000);
+    		}
+		},
+	};
+
+	
+	tenxApp.Webclient = {
+		wsUrl: "ws://localhost:3000",
+		socket: null,
+
+		eventData: null,
+		currentSubEventId: 0,
+		currentTimerEventId: 0,
+		transitionPeriodTime: 5,
+
+		
+		init: function() {
+			
+			// start the websocket 
+			this.socket = new WebSocket(this.wsUrl);
+
+			// get the 10x event info
+			this.eventData = pullEventById(1);
+
+			// normally, we would start from the first subevent, unless the user explicitly asks us not to by providing url params
+			var overwriteSubEventId = this.getUrlParameterByName("subEventId");
+			if (!isNaN(overwriteSubEventId) && overwriteSubEventId != null) {
+				this.currentSubEventId = overwriteSubEventId;
+			}
+			var overwriteTimerEventId = this.getUrlParameterByName("timerEventId");
+			if (!isNaN(overwriteTimerEventId) && overwriteTimerEventId != null) {
+				this.currentTimerEventId = overwriteTimerEventId;
+			}
+
+			// set up the web app to support the event
+			this.setEventName(this.eventData.name);
+
+			// start from first timer event
+			this.beginCurrentTimerEvent();
+
+			
+		},
+
+		getCurrentSubEvent: function() {
+			return this.eventData.subEvents[this.currentSubEventId];
+		},
+
+		getCurrentTimerEvent: function() {
+			return this.getCurrentSubEvent().timerEvents[this.currentTimerEventId];
+		},
+		
+		setEventName: function(eventName) { 
+			$("#event-name").html(eventName); 
+		},
+
+		nextSubEvent: function() {
+			// check if this was the last event
+			// last subEvent
+			if (this.currentSubEventId == this.eventData.subEvents.length - 1) {
+				alert (this.eventData.name + " has ended.");
+			} else {
+				this.currentSubEventId += 1;
+				this.currentTimerEventId = 0;
+				this.beginCurrentTimerEvent();
+			}
+		},
+
+		beginCurrentTimerEvent: function() {
+			
+			var timerEvent = this.getCurrentTimerEvent();
+			$("#timer-info-activity").html(timerEvent.type);
+			$("#timer-info-title").html(timerEvent.description);
+
+			tenxApp.Timer.setTimerSeconds(timerEvent.time);
+			tenxApp.Timer.startTimer();
+		},
+
+		nextTimerEvent: function() {
+			// check if the current subEvent has a next timer event
+			// if last timer event in the sub event
+			if (this.currentTimerEventId == this.getCurrentSubEvent().timerEvents.length - 1) {
+				this.nextSubEvent();
+
+			} else {
+				this.currentTimerEventId += 1
+				this.beginCurrentTimerEvent();
+			}
+		},
+
+		// Taken from SO: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+		getUrlParameterByName: function (name) {
+    		var url = window.location.href;
+    		name = name.replace(/[\[\]]/g, "\\$&");
+    		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        		results = regex.exec(url);
+    		if (!results) return null;
+    		if (!results[2]) return '';
+    		return decodeURIComponent(results[2].replace(/\+/g, " "));
+		}
+
+	};
+
+window.onload = function() {
+	console.log("DOM loaded...");
+	tenxApp.Webclient.init();
+}
+
+pullEventById = function (id) {
+	mockEvent = {
+	   "type":"skills",
+	   "name":"May Skills 10X",
+	   "datetime":"2018-05-05 09:00:00",
+	   "duration":3600,
+	   "presenters":[
+	      "Abhay Sesha",
+	      "Supriya Mishra",
+	      "Darell Platz"
+	   ],
+	   "judges":[
+	      "Tom Fuller",
+	      "Xuelan Zhang",
+	      "Nayan Busa"
+	   ],
+	   "presentationTime":300,
+	   "audienceFeedbackTime":120,
+	   "judgeFeedbackTime":120,
+	   "subEvents":[
+	      {
+	         "presenter":"Abhay Sesha",
+	         "judges":[
+	            "Tom Fuller",
+	            "Xuelan Zhang",
+	            "Nayan Busa"
+	         ],
+	         "presentationTime":300,
+	         "judgeFeedbackTime":120,
+	         "timerEvents":[
+	            {
+	               "type":"Presentation",
+	               "description":"Abhay Sesha",
+	               "time":300
+	            },
+	            {
+	               "type":"Feedback",
+	               "description":"Audience",
+	               "time":10
+	            },
+	            {
+	               "type":"Judge Feedback",
+	               "description":"Tom Fuller",
+	               "time":10
+	            },
+	            {
+	               "type":"Judge Feedback",
+	               "description":"Xuelan Zhang",
+	               "time":10
+	            },
+	            {
+	               "type":"Judge Feedback",
+	               "description":"Nayan Busa",
+	               "time":10
+	            }
+	         ]
+	      },
+	      {
+	         "presenter":"Supriya Mishra",
+	         "judges":[
+	            "Tom Fuller",
+	            "Xuelan Zhang",
+	            "Nayan Busa"
+	         ],
+	         "presentationTime":300,
+	         "judgeFeedbackTime":120,
+	         "timerEvents":[
+	            {
+	               "type":"presentation",
+	               "description":"Supriya Mishra",
+	               "time":300
+	            },
+	            {
+	               "type":"audience feedback",
+	               "description":"",
+	               "time":120
+	            },
+	            {
+	               "type":"judge feedback",
+	               "description":"Tom Fuller",
+	               "time":120
+	            },
+	            {
+	               "type":"judge feedback",
+	               "description":"Xuelan Zhang",
+	               "time":120
+	            },
+	            {
+	               "type":"judge feedback",
+	               "description":"Nayan Busa",
+	               "time":120
+	            }
+	         ]
+	      },
+	      {
+	         "presenter":"Darell Platz",
+	         "judges":[
+	            "Tom Fuller",
+	            "Xuelan Zhang",
+	            "Nayan Busa"
+	         ],
+	         "presentationTime":300,
+	         "judgeFeedbackTime":120,
+	         "timerEvents":[
+	            {
+	               "type":"presentation",
+	               "description":"Darell Platz",
+	               "time":300
+	            },
+	            {
+	               "type":"audience feedback",
+	               "description":"",
+	               "time":120
+	            },
+	            {
+	               "type":"judge feedback",
+	               "description":"Tom Fuller",
+	               "time":120
+	            },
+	            {
+	               "type":"judge feedback",
+	               "description":"Xuelan Zhang",
+	               "time":120
+	            },
+	            {
+	               "type":"judge feedback",
+	               "description":"Nayan Busa",
+	               "time":120
+	            }
+	         ]
+	      }
+	   ]
+	}
+	
+	return mockEvent;
+}
+
+</script>
