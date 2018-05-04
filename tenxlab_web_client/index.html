@@ -10,10 +10,10 @@
 
 	<body>
 		<div id="unique-code-container">
-			<div>Enter the following code on your app</div>
+			<div id="unique-code-text">Please enter the following code on your app</div>
 			<div id="unique-code"></div>
 		</div>
-		<div id="main-container">
+		<div id="main-container" style="display:none">
 
 			<div id="event-name"></div>
 
@@ -76,8 +76,12 @@
 		},
 
 		beginTimer: function() {
-			this.removeFlashTime()
-			this.startTimer();
+			if (!this.is_running){
+				this.removeFlashTime()
+				this.startTimer();
+			}else{
+				this.resumeTimer();
+			}
 		},
 
 		startTimer: function() {
@@ -119,7 +123,7 @@
 
 	
 	tenxApp.Webclient = {
-		wsUrl: "ws://localhost:3000/ws",
+		wsUrl: "ws://34.211.129.88:80/ws",
 		socket: null,
 
 		eventData: null,
@@ -241,7 +245,7 @@
 		},
 
 		hideUniqueCode: function(){
-			document.getElementById("unique-code").style.display = 'none';
+			document.getElementById("unique-code-container").style.display = 'none';
 			document.getElementById("main-container").style.display = 'flex';
 		},
 
