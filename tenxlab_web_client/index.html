@@ -115,7 +115,7 @@
 
 	
 	tenxApp.Webclient = {
-		wsUrl: "ws://localhost:3000",
+		wsUrl: "ws://localhost:3000/ws",
 		socket: null,
 
 		eventData: null,
@@ -128,6 +128,9 @@
 			
 			// start the websocket 
 			this.socket = new WebSocket(this.wsUrl);
+			this.socket.onopen = function(event) {
+				console.log("WebSocket Opened...");
+			}
 
 			// get the 10x event info
 			this.eventData = pullEventById(1);
