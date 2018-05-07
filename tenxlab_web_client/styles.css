@@ -1,79 +1,152 @@
-#event-container, #screen-code-container {
-	height: 100%;
-	width: 100%;
-	background: #C0C0C0;
-	text-align: center;
-	padding: 40px;
+body {
+	margin: 0px;
+	background-color: #efefef;
+	font-family: 'Avenir', sans-serif;
+	font-size: 1rem;
+	color: #333333;
+}
 
+/* Small devices (landscape phones, 544px and up) */
+@media (min-width: 544px) {  
+  body {font-size:1rem;} /*1rem = 16px*/
+}
+ 
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {  
+  body {font-size:1.5rem;} /*1rem = 16px*/
+}
+ 
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+  body {font-size:1.5rem;} /*1rem = 16px*/
+}
+ 
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  
+  body {font-size:2rem;} /*1rem = 16px*/    
+}
+
+h1, h2, h3, h4, h5, h6, .heading {
 	font-family: 'Montserrat', sans-serif;
-	
+}
+
+/* Common Styles */
+
+.flexbox {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.bg-light {
+	background-color: #efefef;
+}
+
+.center-content {
+	text-align: center;
+}
+
+.hide {
+	display: none !important;
+}
+
+/* Nav Bar */
+
+.navbar-brand-name {
+	display: inline;
+	font-weight: bold;
+	vertical-align: bottom;
+	font-size: 1.5rem;
+}
+
+.navbar-brand {
+	color: #EFEFEF;
+}
+
+/* Connect Modal */
+
+#connect-modal {
+	background: #efefef; 
+	padding: 80px 40px 40px 40px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
-#event-name, #screen-code-title {
-	font-size: 4em;	
+#connect-modal-heading {
+	font-size: 3em;	
 }
 
-#screen-code-description {
+#connect-modal-description {
+	font-size: 1em;	
+	margin-top: 20px;
+}
+
+#connect-modal-qrcode {
+	margin-top: 40px;
+	margin-bottom: 10px;
+}
+
+#connect-modal-code {
+	font-family: 'Roboto Mono', monospace;
 	font-size: 3em;
 }
 
-#timer-countdown, #screen-code {
-	display: flex;
-	flex-wrap: nowrap;
-	justify-content: center;
-	align-items: baseline;
-	
-	margin-top: 150px;
-	margin-bottom: 100px; 
-	color: black;
-	font-family: 'Roboto Mono', monospace;
+/* Run Modal */
+
+#run-modal {
+	text-align: center;
 }
 
+#run-modal-title {
+	margin-top: 40px;
+	font-size: 2em;	
+}
+
+#timer-countdown {
+	color: darkslategray;
+}
+
+/* Timer */
 #timer-countdown.times-up {
 	color: red;
 }
 
-#timer-countdown #timer-time, #screen-code{
-	font-size: 16em;
+#timer-time {
+	font-size: 9em;
+}
+
+.timer-time-unit {
+	font-size: 0.4em;
+}
+
+#timer-event-info-activity {
+	font-size: 1em;
+}
+#timer-event-info-title {
+	font-size: 3em;
 	font-weight: bold;
 }
-
-
-
-#timer-countdown #timer-unit {
-	font-size: 6em;
+#timer-event-info-description {
+	font-size: 1em;
 }
 
-#timer-event-description {
-	font-size: 4em;
-}
-
-#timer-info-activity {
-	font-style: italic;
-	font-size: 2em;
-}
-
-#timer-info-title {
-	font-size: 4em;
-	font-weight: bold;
-}
-
-#timer-progress-bar {
-  width: 90%;
+#timer-event-progress-bar {
+  width: 100%;
   margin: 30px auto;
   height: 22px;
   background-color: lightgray;
 }
 
-#timer-progress-bar div {
+#timer-event-progress-bar div {
   height: 100%;
+  width: 100%;
   text-align: right;
   padding: 0 10px;
   line-height: 22px; /* same as #timer-progress-bar height if we want text middle aligned */
-  width: 0;
-  background-color: #0A5F44;
+  font-size: 0.6em;
+  color: white;
+  background-color: darkslategray;
   box-sizing: border-box;
 }

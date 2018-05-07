@@ -1,2 +1,3 @@
-server
+tenxlab_server.out
+nohup.out
 data/*

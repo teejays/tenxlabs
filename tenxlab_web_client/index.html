@@ -1,365 +1,400 @@
-<html>
+<!doctype html>
+<html lang="en">
 	<head>
-		<link rel="stylesheet" href="styles.css" type="text/css" />
-		<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto+Mono" rel="stylesheet">
+		 <!-- Required meta tags -->
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 		<!-- JQuery -->
 		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+		<!-- QR Code -->
+		<script type="text/javascript" src="qrcode.js"></script>
+
+		<!-- Style and Fonts -->
+		<link rel="stylesheet" href="styles.css" type="text/css" />
+		<link href="https://fonts.googleapis.com/css?family=Montserrat|Muli|Roboto" rel="stylesheet">
+
+		<title>10x Screen</title>
 
 	</head>
 
 	<body>
 
-		<div id="screen-code-container">
-			<div id="screen-code-title">
-				<strong>Connection Instructions</strong>
+		<div class="container-fluid">
+
+			<!-- Navigation Bar -->
+			<div class="row">
+        		<nav class="col navbar navbar-dark bg-dark">
+				  <a class="navbar-brand" href="#">
+				    <img style="height: 40px" src="http://www.nextjump.com/wp-content/uploads/2016/09/nxj-icon.png" alt="">
+				    <div class="navbar-brand-name heading">&nbsp; 10x Screencast&nbsp;</div>
+				  </a>
+				</nav>
+   			</div>
+
+			<!-- Connection Modal -->
+	
+			<div id="connect-modal">
+				<div id="connect-modal-heading" class="heading">
+					Screencast 10x 
+				</div>
+
+				<div id="connect-modal-description">
+					To connect to this screen, please scan the below QR Code using your 10x Admin App or manually enter the code.
+				</div>
+				
+				<div id="connect-modal-qrcode" class="center-content"></div>
+				<div id="connect-modal-code" class="center-content"></div>
 			</div>
-			<br />
-			<div id="screen-code-description">Please enter the following code on your 10xLab App to connect</div>
-			<div id="screen-code"></div>
-		</div>
 		
-		<div id="event-container" style="display:none">
+		<div id="run-modal" class="hide flexbox">
 
-			<div id="event-name"></div>
+			<div id="run-modal-title"></div> <!-- this could be the event title -->
+			<div id="run-modal-subtitle"></div> <!-- this could be the sub event title -->
 
-			<div id="timer-countdown">
+			<div id="timer-countdown" class="flexbox">
 				<div id="timer-time"></div>
-
-<!-- 				<div id="timer-unit">s</div> -->
-
 			</div>
 
-			<div id="timer-info">
-				<div id="timer-info-activity"></div>
-				<div id="timer-info-title"></div>
+			<div id="timer-event-info">
+				<div id="timer-event-info-activity"></div>
+				<div id="timer-event-info-title"></div>
+				<div id="timer-event-info-description"></div>
 			</div>
 
-			<div id="timer-progress-bar">
+			<div id="timer-event-progress-bar">
 			  	<div class="bar"></div>
 			</div>
 		</div>
+
+	</div>
+
+		<!-- Bootstrap JS -->
+		<!-- 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+	
+
+		<script type="text/javascript">
+
+			var tenxApp = tenxApp || window.Object; 
+
+			tenxApp.Timer = {
+				total_seconds: null,
+				remaining_seconds: null,
+				is_running: false,
+
+				setTimerSeconds: function(nano_secs) {
+					this.total_seconds = nano_secs / (1000000000); // convert nanoseconds to seconds
+					this.remaining_seconds = nano_secs / (1000000000);
+					this.updateTimerSeconds();
+				},
+
+				updateTimerSeconds: function() {  
+		  			var minutes = Math.floor((this.remaining_seconds % (1000 * 60 * 60)) / (60));
+		  			var seconds = Math.floor((this.remaining_seconds % (60)));	
+
+					$("#timer-countdown #timer-time").html(minutes + '<span class="timer-time-unit">m </span>' + seconds + '<span class="timer-time-unit">s </span>');
+					console.log($('#timer-event-progress-bar').width());
+					this.updateProgressBar();
+				},
+
+				decrementTimer: function() {
+					if (this.remaining_seconds > 0) {
+						this.remaining_seconds -= 1;
+						this.updateTimerSeconds();
+					}
+				},
+
+				startFlashTime: function() {
+					$("#timer-countdown").addClass("times-up");
+				},
+
+				removeFlashTime: function() {
+					$("#timer-countdown").removeClass("times-up");
+				},
+
+				beginTimer: function() {
+					if (!this.is_running){
+						this.removeFlashTime()
+						this.startTimer();
+					}else{
+						this.resumeTimer();
+					}
+				},
+
+				startTimer: function() {
+					this.is_running = true;
+					var self = this;
+					this.interval = setInterval(function() {
+						if (self.remaining_seconds > 0) {
+							self.decrementTimer();
+						} else {
+							self.pauseTimer();
+							self.startFlashTime();
+							// go to the next event
+							setTimeout(function(){ tenxApp.Webclient.nextTimerEvent(); }, 3000);
+						}
+
+					}, 1000);
+				},
+
+				pauseTimer: function() {
+					if (this.is_running) {
+						clearInterval(this.interval);
+						this.is_running = false;
+					}
+				},
+
+				resumeTimer: function() {
+					if (!this.is_running) {
+						this.startTimer();
+						this.is_running = true;
+					}
+				},
+
+				updateProgressBar: function() {
+					var $element = $('#timer-event-progress-bar');
+					var self = this;
+					setTimeout(function(){
+						var width = $element.width();
+    					var progressBarWidth = self.remaining_seconds * $element.width() / self.total_seconds;
+		    			$element.find('div').animate({ width: progressBarWidth }, 500).html(Math.floor(self.remaining_seconds / 60) + ":"+ self.remaining_seconds % 60);
+					},0);
+					
+				},
+			};
+
+			tenxApp.WebSocketHandler = {
+				// wsUrl: "ws://34.211.129.88:80/ws",
+				wsUrl: "ws://34.211.129.88:3000/ws",
+				socket: null,
+
+				init: function() {
+					// start the websocket 
+					this.socket = new WebSocket(this.wsUrl);
+					
+					this.socket.onopen = function(event) {
+						console.log("WebSocket Opened...");
+					}
+
+					this.socket.onmessage = function(event) {
+						data = JSON.parse(event.data);
+						if (data && data.MessageType){
+							switch(data.MessageType){
+								case "ScreenCode":
+									tenxApp.Webclient.setScreenCode(data.Message);
+									break;
+
+								case "EventData":
+									var eventData = data.Message;
+									tenxApp.Webclient.setEvent(eventData);
+									tenxApp.Webclient.hideConnectModal();
+									break;
+
+								case "Start":
+									tenxApp.Webclient.startEvent();
+									break;
+
+								case "Pause":
+									tenxApp.Timer.pauseTimer();
+									break;
+
+								case "Resume":
+									tenxApp.Timer.resumeTimer();
+									break;
+
+								case "Next":
+									tenxApp.Webclient.nextTimerEvent();
+									break;
+
+								case "Previous":
+									tenxApp.Webclient.previousTimerEvent();
+									break;
+							}
+						}
+					}
+				},
+			}
+
+			
+			tenxApp.Webclient = {
+
+				eventData: null,
+				currentSubEventId: 0,
+				currentTimerEventId: 0,
+				transitionPeriodTime: 5,
+				hasEventStarted: false,
+
+				
+				init: function() {
+					tenxApp.WebSocketHandler.init();
+				},
+
+				setEvent: function(eventData) {
+					this.eventData = eventData;
+					this.setEventName(eventData.Name);
+
+					// normally, we would start from the first subevent, unless the user explicitly asks us not to by providing url params
+					var overwriteSubEventId = this.getUrlParameterByName("subEventId");
+					if (!isNaN(overwriteSubEventId) && overwriteSubEventId != null) {
+						this.currentSubEventId = overwriteSubEventId;
+					}
+					var overwriteTimerEventId = this.getUrlParameterByName("timerEventId");
+					if (!isNaN(overwriteTimerEventId) && overwriteTimerEventId != null) {
+						this.currentTimerEventId = overwriteTimerEventId;
+					}
+
+					this.setCurrentTimerEvent();
+
+				},
+
+				setEventData: function(eventData){
+					this.eventData = eventData
+
+				},
+
+				setEventName: function(eventName) { 
+					$("#run-modal-title").html(eventName); 
+				},
+
+				startEvent: function() {
+					if (this.hasEventStarted) {
+						console.log("Event has already been started.")
+					} else {
+						this.hasEventStarted = true
+						this.beginCurrentTimerEvent();
+					}
+				},
+				
+				nextSubEvent: function() {
+					// check if this was the last event
+					// last subEvent
+					if (this.currentSubEventId == this.eventData.SubEvents.length - 1) {
+						alert (this.eventData.Name + " has ended.");
+					} else {
+						this.currentSubEventId += 1;
+						this.currentTimerEventId = 0;
+						this.beginCurrentTimerEvent();
+					}
+				},
+
+				previousSubEvent: function() {
+					// check if this is the first sub event
+					// if first subEvent
+					if (this.currentSubEventId == 0) {
+						alert ("Can't go to the previous sub event, this is the first one.");
+					} else {
+						this.currentSubEventId -= 1;
+						// should be the last item of the subEventId
+						this.currentTimerEventId = this.getCurrentSubEvent().TimerEvents.length - 1;
+						this.beginCurrentTimerEvent();
+					}
+				},
+
+				setCurrentTimerEvent: function() {
+					var timerEvent = this.getCurrentTimerEvent();
+					var timerEventActivity = ""
+					var timerEventTitle = ""
+					var timerEventDesc = ""
+					
+					switch (timerEvent.ActivityType) {
+						case "Presentation":
+							timerEventActivity = "Now Presenting";
+							timerEventTitle = timerEvent.Title;
+							timerEventDesc = "Use your pen and paper for notes";
+							break;
+						case "Feedback":
+							if (timerEvent.Title = 'Audience Feedback') {
+								timerEventActivity = "Audience Feeback";
+								timerEventDesc = "Use the Feedback App to give provide feedback";
+							} else if (timerEvent.Title = 'Judge Scoring') {
+								timerEventActivity = "Judge Scoring";
+								timerEventDesc = "Judges, use the 10x paddles to score";
+							}
+							break;
+						case "Judge Feedback":
+							timerEventActivity = "Now Judging";
+							timerEventTitle = timerEvent.Title;
+							break;
+						}
+
+					$("#timer-event-info-activity").html(timerEventActivity);
+					$("#timer-event-info-title").html(timerEventTitle);
+					$("#timer-event-info-description").html(timerEventDesc);
+
+					tenxApp.Timer.setTimerSeconds(timerEvent.Duration);
+				},
+
+				beginCurrentTimerEvent: function() {
+					this.setCurrentTimerEvent();
+					tenxApp.Timer.beginTimer();
+				},
+
+				nextTimerEvent: function() {
+					// check if the current subEvent has a next timer event
+					// if last timer event in the sub event
+					if (this.currentTimerEventId == this.getCurrentSubEvent().TimerEvents.length - 1) {
+						this.nextSubEvent();
+
+					} else {
+						this.currentTimerEventId += 1
+						this.beginCurrentTimerEvent();
+					}
+				},
+
+				previousTimerEvent: function() {
+					// check if the current subEvent has a previous timer event
+					// if last timer event in the sub event
+					if (this.currentTimerEventId == 0) {
+						this.previousSubEvent();
+					} else {
+						this.currentTimerEventId -= 1
+						this.beginCurrentTimerEvent();
+					}
+				},
+
+				setScreenCode: function(code){
+					$("#connect-modal-code").html(code);
+					new QRCode(document.getElementById("connect-modal-qrcode"), code);
+					$("#connect-modal-qrcode > img").css({"margin":"auto"});
+				},
+
+				hideConnectModal: function(){
+					$("#connect-modal").addClass("hide");
+					$("#run-modal").removeClass("hide");
+				},
+
+				getCurrentSubEvent: function() {
+					return this.eventData.SubEvents[this.currentSubEventId];
+				},
+
+				getCurrentTimerEvent: function() {
+					return this.getCurrentSubEvent().TimerEvents[this.currentTimerEventId];
+				},
+
+				// Taken from SO: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+				getUrlParameterByName: function (name) {
+		    		var url = window.location.href;
+		    		name = name.replace(/[\[\]]/g, "\\$&");
+		    		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		        		results = regex.exec(url);
+		    		if (!results) return null;
+		    		if (!results[2]) return '';
+		    		return decodeURIComponent(results[2].replace(/\+/g, " "));
+				},
+
+			};
+
+		$(document).ready(function() {
+			console.log("DOM loaded...");
+			tenxApp.Webclient.init();;
+		});
+
+		</script>
+
 	</body>
 </html>
-
-<script type="text/javascript">
-
-	var tenxApp = tenxApp || window.Object; 
-
-	tenxApp.Timer = {
-		total_seconds: null,
-		remaining_seconds: null,
-		is_running: false,
-
-		setTimerSeconds: function(nano_secs) {
-			this.total_seconds = nano_secs / (1000000000); // convert nanoseconds to seconds
-			this.remaining_seconds = nano_secs / (1000000000);
-			this.updateTimerSeconds();
-		},
-
-		updateTimerSeconds: function() {  
-  			var minutes = Math.floor((this.remaining_seconds % (1000 * 60 * 60)) / (60));
-  			var seconds = Math.floor((this.remaining_seconds % (60)));	
-
-			$("#timer-countdown #timer-time").html(minutes + "m " + seconds + "s ");
-			this.updateProgressBar(this.remaining_seconds, this.total_seconds, $('#timer-progress-bar'));
-		},
-
-		decrementTimer: function() {
-			if (this.remaining_seconds > 0) {
-				this.remaining_seconds -= 1;
-				this.updateTimerSeconds();
-			}
-		},
-
-		startFlashTime: function() {
-			$("#timer-countdown").addClass("times-up");
-		},
-
-		removeFlashTime: function() {
-			$("#timer-countdown").removeClass("times-up");
-		},
-
-		beginTimer: function() {
-			if (!this.is_running){
-				this.removeFlashTime()
-				this.startTimer();
-			}else{
-				this.resumeTimer();
-			}
-		},
-
-		startTimer: function() {
-			this.is_running = true;
-			var self = this;
-			this.interval = setInterval(function() {
-				if (self.remaining_seconds > 0) {
-					self.decrementTimer();
-				} else {
-					self.pauseTimer();
-					self.startFlashTime();
-					// go to the next event
-					setTimeout(function(){ tenxApp.Webclient.nextTimerEvent(); }, 3000);
-				}
-
-			}, 1000);
-		},
-
-		pauseTimer: function() {
-			if (this.is_running) {
-				clearInterval(this.interval);
-				this.is_running = false;
-			}
-		},
-
-		resumeTimer: function() {
-			if (!this.is_running) {
-				this.startTimer();
-				this.is_running = true;
-			}
-		},
-
-		updateProgressBar: function(timeleft, timetotal, $element) {
-			var self = this;
-			var progressBarWidth = timeleft * $element.width() / timetotal;
-			console.log(progressBarWidth);
-    		$element.find('div').animate({ width: progressBarWidth }, 500).html(Math.floor(timeleft/60) + ":"+ timeleft%60);
-		},
-	};
-
-	tenxApp.WebSocketHandler = {
-		// wsUrl: "ws://34.211.129.88:80/ws",
-		wsUrl: "ws://34.211.129.88:3000/ws",
-		socket: null,
-
-		init: function() {
-			// start the websocket 
-			this.socket = new WebSocket(this.wsUrl);
-			
-			this.socket.onopen = function(event) {
-				console.log("WebSocket Opened...");
-			}
-
-			this.socket.onmessage = function(event) {
-				data = JSON.parse(event.data);
-				if (data && data.MessageType){
-					switch(data.MessageType){
-						case "ScreenCode":
-							tenxApp.Webclient.setScreenCode(data.Message);
-							break;
-
-						case "EventData":
-							var eventData = data.Message;
-							tenxApp.Webclient.setEvent(eventData);
-							tenxApp.Webclient.hideScreenCode();
-							break;
-
-						case "Start":
-							tenxApp.Webclient.startEvent();
-							break;
-
-						case "Pause":
-							tenxApp.Timer.pauseTimer();
-							break;
-
-						case "Resume":
-							tenxApp.Timer.resumeTimer();
-							break;
-
-						case "Next":
-							tenxApp.Webclient.nextTimerEvent();
-							break;
-
-						case "Previous":
-							tenxApp.Webclient.previousTimerEvent();
-							break;
-					}
-				}
-			}
-		},
-	}
-
-	
-	tenxApp.Webclient = {
-
-		eventData: null,
-		currentSubEventId: 0,
-		currentTimerEventId: 0,
-		transitionPeriodTime: 5,
-		hasEventStarted: false,
-
-		
-		init: function() {
-			tenxApp.WebSocketHandler.init();
-		},
-
-		setEvent: function(eventData) {
-			this.eventData = eventData;
-			this.setEventName(eventData.Name);
-
-			// normally, we would start from the first subevent, unless the user explicitly asks us not to by providing url params
-			var overwriteSubEventId = this.getUrlParameterByName("subEventId");
-			if (!isNaN(overwriteSubEventId) && overwriteSubEventId != null) {
-				this.currentSubEventId = overwriteSubEventId;
-			}
-			var overwriteTimerEventId = this.getUrlParameterByName("timerEventId");
-			if (!isNaN(overwriteTimerEventId) && overwriteTimerEventId != null) {
-				this.currentTimerEventId = overwriteTimerEventId;
-			}
-
-			this.setCurrentTimerEvent();
-
-		},
-
-		setEventData: function(eventData){
-			this.eventData = eventData
-
-		},
-
-		setEventName: function(eventName) { 
-			$("#event-name").html(eventName); 
-		},
-
-		startEvent: function() {
-			if (this.hasEventStarted) {
-				console.log("Event has already been started.")
-			} else {
-				this.hasEventStarted = true
-				this.beginCurrentTimerEvent();
-			}
-		},
-
-		getCurrentSubEvent: function() {
-			return this.eventData.SubEvents[this.currentSubEventId];
-		},
-
-		getCurrentTimerEvent: function() {
-			return this.getCurrentSubEvent().TimerEvents[this.currentTimerEventId];
-		},
-		
-		nextSubEvent: function() {
-			// check if this was the last event
-			// last subEvent
-			if (this.currentSubEventId == this.eventData.SubEvents.length - 1) {
-				alert (this.eventData.Name + " has ended.");
-			} else {
-				this.currentSubEventId += 1;
-				this.currentTimerEventId = 0;
-				this.beginCurrentTimerEvent();
-			}
-		},
-
-		previousSubEvent: function() {
-			// check if this is the first sub event
-			// if first subEvent
-			if (this.currentSubEventId == 0) {
-				alert ("Can't go to the previous sub event, this is the first one.");
-			} else {
-				this.currentSubEventId -= 1;
-				// should be the last item of the subEventId
-				this.currentTimerEventId = this.getCurrentSubEvent().TimerEvents.length - 1;
-				this.beginCurrentTimerEvent();
-			}
-		},
-
-		setCurrentTimerEvent: function() {
-			var timerEvent = this.getCurrentTimerEvent();
-			$("#timer-info-activity").html(timerEvent.ActivityType);
-			$("#timer-info-title").html(timerEvent.Title);
-
-			tenxApp.Timer.setTimerSeconds(timerEvent.Duration);
-		},
-
-		beginCurrentTimerEvent: function() {
-			this.setCurrentTimerEvent();
-			tenxApp.Timer.beginTimer();
-		},
-
-		nextTimerEvent: function() {
-			// check if the current subEvent has a next timer event
-			// if last timer event in the sub event
-			if (this.currentTimerEventId == this.getCurrentSubEvent().TimerEvents.length - 1) {
-				this.nextSubEvent();
-
-			} else {
-				this.currentTimerEventId += 1
-				this.beginCurrentTimerEvent();
-			}
-		},
-
-		previousTimerEvent: function() {
-			// check if the current subEvent has a previous timer event
-			// if last timer event in the sub event
-			if (this.currentTimerEventId == 0) {
-				this.previousSubEvent();
-			} else {
-				this.currentTimerEventId -= 1
-				this.beginCurrentTimerEvent();
-			}
-		},
-
-		// Taken from SO: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-		getUrlParameterByName: function (name) {
-    		var url = window.location.href;
-    		name = name.replace(/[\[\]]/g, "\\$&");
-    		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        		results = regex.exec(url);
-    		if (!results) return null;
-    		if (!results[2]) return '';
-    		return decodeURIComponent(results[2].replace(/\+/g, " "));
-		},
-
-		setScreenCode: function(code){
-			$("#screen-code-container #screen-code").html(code);
-		},
-
-		hideScreenCode: function(){
-			document.getElementById("screen-code-container").style.display = 'none';
-			document.getElementById("event-container").style.display = 'flex';
-		},
-
-		// parseSubEventData: function(subEventData){
-		// 	var subevent = new Object();
-		// 	//temp person obj to put in info
-		// 	subevent.presenter = new Object();
-		// 	//presenter
-		// 	subevent.presenter.id = subEventData.Presenter.Id;
-		// 	subevent.presenter.name = subEventData.Presenter.Name;
-			
-		// 	//judges
-		// 	subevent.judges = new Array();
-		// 	for (var i = 0, len = subEventData.Judges.length; i < len; i++){
-		// 		var judge = new Object();
-		// 		judge.id = subEventData.Judges[i].Id;
-		// 		judge.name = subEventData.Judges[i].Name;
-		// 		subevent.judges.push(judge);
-		// 	}
-
-		// 	subevent.presentationTime = subEventData.PresentationDuration / 1000000000;
-		// 	subevent.audienceFeedbackTime = subEventData.AudienceFeedbackDuration / 1000000000;
-		// 	subevent.judgeFeedbackTime = subEventData.JudgeFeedbackDuration / 1000000000;
-
-		// 	subevent.timerEvents = new Array();
-		// 	for (var i = 0, len = subEventData.TimerEvents.length; i < len; i++){
-		// 		subevent.timerEvent = this.getTimerEventData(subEventData.TimerEvents[i]);
-		// 		subevent.timerEvents.push(subevent.timerEvent);
-		// 	}
-		// 	return subevent;
-		// },
-
-		// getTimerEventData: function(timerEventData){
-		// 	var timerevent = new Object();
-		// 	timerevent.type = timerEventData.ActivityType;
-		// 	timerevent.description = timerEventData.Title;
-		// 	timerevent.time = timerEventData.Duration / 1000000000;
-		// 	return timerevent;
-		// }
-
-	};
-
-window.onload = function() {
-	console.log("DOM loaded...");
-	tenxApp.Webclient.init();
-}
-
-</script>
