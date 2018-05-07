@@ -8,8 +8,10 @@ import {
   Image,
   Text,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
+  Button
 } from 'react-native';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 import Title from './Title'
 import Style from './Style'
 import Moment from 'moment'
@@ -28,9 +30,16 @@ export default class EventScreen extends Component {
     
     // define default states
     this.state = {
-      event: TenXEvents[0]
+      event: TenXEvents[0],
+      visible: false,
+      allowMomentum: true,
+      showBackdrop: false
     };
 
+  }
+
+  capitalize(str){
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   render () {
@@ -39,11 +48,11 @@ export default class EventScreen extends Component {
     const { event } = this.state;
 
     return (
-      <ScrollView style={Style.scrollScreen}>
+      <View>
 
         // title
         <View style={[Style.center]}>
-          <Title text={event.type + ' 10x'}></Title>
+          <Text style={[Style.eventTitle]}>{this.capitalize(event.type + ' 10x')}</Text>
           <Text>
             {'\n'}
             { Moment(event.datetime).format('dddd, MMM d @ hh:mm a') }
@@ -78,12 +87,20 @@ export default class EventScreen extends Component {
               />
             })}
         </View>
-
         <View style={Style.section}> 
-          <ConnectionInput/>
+          <Button title='Start Event' onPress={() => this.setState({visible: true})} />
+          <SlidingUpPanel
+            visible={this.state.visible}
+            showBackdrop={this.state.showBackdrop}
+            allowMomentum={this.state.allowMomentum}
+            onRequestClose={() => this.setState({visible: false})}>
+            <View style={Style.eventPanel}>
+              <ConnectionInput/>
+            </View>
+          </SlidingUpPanel>
         </View>
 
-      </ScrollView>
+      </View>
     )
   }
 }
