@@ -16,9 +16,11 @@
     "react-native-form-library": "^1.0.6",
     "react-native-form-validator": "^0.2.0",
     "react-native-modal-datetime-picker": "^5.1.0",
+    "react-native-sliding-up-panel": "^1.1.12",
     "react-native-tab-view": "0.0.77",
     "react-native-vector-icons": "^4.6.0",
-    "react-navigation": "^1.5.11"
+    "react-navigation": "^1.5.11",
+    "rn-sliding-up-panel": "^1.2.0"
   },
   "devDependencies": {
     "babel-jest": "22.4.3",

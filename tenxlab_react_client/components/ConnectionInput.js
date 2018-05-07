@@ -9,8 +9,10 @@ import {
   View,
   Text,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  Image
 } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Style from './Style';
 import axios from 'axios';
 
@@ -32,15 +34,16 @@ export default class ConnectionInput extends Component {
     this.state = {
         code: "",
         appToken: "",
-        eventId: 1
+        eventId: 1,
+        connected: false,
+        paused: true,
+        startAction: 'start'
     }
     
     this.connectServer = this.connectServer.bind(this);
     this.sendStart = this.sendStart.bind(this);
     this.sendPause = this.sendPause.bind(this);
     this.sendNext = this.sendNext.bind(this);
-    this.sendResume = this.sendResume.bind(this);
-
   }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -55,18 +58,30 @@ export default class ConnectionInput extends Component {
       "code": code,
       "eventId":1
     })
-      .then(response => this.setAppToken(response.data) )
+      .then(response => {
+        this.setAppToken(response.data);
+        if(response.status == 200){
+          this.setState({connected: true})
+        }
+      })
       .catch(error => console.log(error));
   }
 
   sendStart() {
-    const { appToken } = this.state;
+    const { appToken, startAction } = this.state;
     console.log(appToken);
+
     axios.post('http://34.211.129.88:3000/screen/control',{
       "appToken": appToken,
-      "action": 'start'
+      "action": startAction
     })
-      .then(response => console.log(response))
+      .then(response => {
+        console.log(response);
+        if(response.status == 200){
+          this.setState({paused: false})
+          this.setState({startAction: 'resume'})
+        }
+      })
       .catch(error => console.log(error));
   }
 
@@ -76,7 +91,12 @@ export default class ConnectionInput extends Component {
       "appToken": appToken,
       "action": 'pause'
     })
-      .then(response => console.log(response))
+      .then(response => {
+        console.log(response);
+        if(response.status == 200){
+          this.setState({paused: true})
+        }
+      })
       .catch(error => console.log(error));
   }
 
@@ -86,18 +106,88 @@ export default class ConnectionInput extends Component {
       "appToken": appToken,
       "action": 'next'
     })
-      .then(response => console.log(response))
+      .then(response => {
+        console.log(response);
+        if(response.status == 200){
+          this.setState({paused: false})
+        }
+      })
       .catch(error => console.log(error));
   }
 
-  sendResume() {
-    const { appToken } = this.state;
-    axios.post('http://34.211.129.88:3000/screen/control',{
-      "appToken": appToken,
-      "action": 'resume'
-    })
-      .then(response => console.log(response))
-      .catch(error => console.log(error));
+  _renderControl(code, appToken, action) {
+      if (!this.state.connected) {
+          return (
+            <View style={[Style.center,Style.section]}>
+              <Text style={Style.sectionText}>Please Enter your code: </Text>
+              <TextInput
+                style={[Style.textInput,Style.eventCode]}
+                ref="code"
+                onChangeText={(code) => this.setState({code})} 
+                value={code} />
+              <TouchableHighlight 
+                style={Style.button}
+                onPress={this.connectServer.bind()}
+              >
+                <Text style={Style.buttonText}>Connect</Text>
+              </TouchableHighlight>
+            </View>
+          );
+      } 
+
+      if (this.state.connected){
+        return (
+          <View style={Style.center}>
+            <Text style={Style.sectionText}>Now Presenting: </Text>
+            <Image
+              style={Style.eventPanelIcon}
+              resizeMode={'contain'}
+              source={{uri: 'https://apps.api.nextjump.com/v1/topten/user/77576940/image'}}
+            />
+            <View style={[Style.row, Style.eventPanelControl]}>
+              {this._renderPlay()}
+              <TouchableHighlight 
+                  style={Style.button}
+                  onPress={this.sendNext}
+                >
+                <Entypo
+                  name="controller-next"
+                  size={40}
+                />
+              </TouchableHighlight>
+            </View>
+          </View>
+        )
+      }
+  }
+
+  _renderPlay() {
+    if (this.state.paused){
+      return (
+        <TouchableHighlight 
+          style={Style.button}
+          onPress={this.sendStart}
+        >
+          <Entypo
+            name="controller-play"
+            size={40}
+          />
+        </TouchableHighlight>
+      )
+    }
+    if (!this.state.paused){
+      return (
+        <TouchableHighlight 
+          style={Style.button}
+          onPress={this.sendPause}
+        >
+          <Entypo
+            name="controller-paus"
+            size={40}
+          />
+        </TouchableHighlight>
+      )
+    }
   }
 
   render() {
@@ -107,57 +197,7 @@ export default class ConnectionInput extends Component {
 
     return (
       <View style={Style.center}>
-        <View style={[Style.center,Style.section]}>
-          <TextInput
-            style={[Style.textInput,Style.eventCode]}
-            ref="code"
-            onChangeText={(code) => this.setState({code})} 
-            value={code} />
-        </View>
-
-        <View style={[Style.center,Style.section]}>
-          <TouchableHighlight 
-            style={Style.button}
-            onPress={this.connectServer.bind()}
-          >
-            <Text style={Style.buttonText}>Connect</Text>
-          </TouchableHighlight>
-        </View>
-
-        <View style={[Style.center,Style.row]}>
-
-          <TouchableHighlight 
-            style={Style.button}
-            onPress={this.sendStart}
-          >
-            <Text style={Style.buttonText}>Start</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight 
-            style={Style.button}
-            onPress={this.sendResume}
-          >
-            <Text style={Style.buttonText}>Resume</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight 
-            style={Style.button}
-            onPress={this.sendPause}
-          >
-            <Text style={Style.buttonText}>Pause</Text>
-          </TouchableHighlight>
-
-            <TouchableHighlight 
-              style={Style.button}
-              onPress={this.sendNext}
-            >
-              <Text style={Style.buttonText}>Next</Text>
-            </TouchableHighlight>
-
-            
-
-        </View>
-
+        {this._renderControl(code, appToken, action)}  
       </View>
     );
   }

@@ -66,6 +66,9 @@ var Style = {
 		fontSize: 18,
 		color: '#FFF'
 	},
+	sectionText: {
+		marginTop: 10
+	},
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Font
@@ -92,6 +95,9 @@ var Style = {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Event
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	eventTitle: {
+		fontSize: 32,
+	},
 	eventIcon: {
 		width: 60,
 		height: 60,
@@ -106,6 +112,21 @@ var Style = {
 	},
 	eventCode: {
 		fontSize: 32,
+		marginBottom: 20,
+	},
+	eventPanel: {
+	    flex: 1,
+	    backgroundColor: 'lightgray',
+	    position: 'relative'
+	},
+	eventPanelIcon: {
+		width: 120,
+		height: 120,
+		margin: 15
+	},
+	eventPanelControl: {
+		justifyContent: 'space-around',
+		alignItems: 'space-around'
 	}
 
 };
