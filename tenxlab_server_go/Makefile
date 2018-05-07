@@ -15,7 +15,7 @@ run:
 run-bg:
 	nohup ./$(BINARY_NAME) -server="$(SERVER)" > $(OUTPUT_FILE) &
 kill:
-	pkill $(BINARY_NAME)
+	killall $(BINARY_NAME)
 release: update build kill run-bg
 
 
@@ -25,4 +25,4 @@ sudo-run: build
 sudo-run-bg:
 	nohup sudo -b ./$(BINARY_NAME) -server="$(SERVER)" > $(OUTPUT_FILE)
 sudo-kill:
-	sudo sudo pkill $(BINARY_NAME)
+	sudo sudo killall $(BINARY_NAME)
