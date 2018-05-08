@@ -44,6 +44,7 @@ export default class ConnectionInput extends Component {
     this.sendStart = this.sendStart.bind(this);
     this.sendPause = this.sendPause.bind(this);
     this.sendNext = this.sendNext.bind(this);
+    this.sendPrev = this.sendPrev.bind(this);
   }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -114,6 +115,34 @@ export default class ConnectionInput extends Component {
       .catch(error => console.log(error));
   }
 
+  sendPrev() {
+    const { appToken } = this.state;
+    axios.post('http://34.211.129.88:3000/screen/control',{
+      "appToken": appToken,
+      "action": 'previous'
+    })
+      .then(response => {
+        console.log(response);
+        if(response.status == 200){
+          this.setState({paused: false})
+        }
+      })
+      .catch(error => console.log(error));
+  }
+
+  _renderChevron(){
+    return(
+      <View style={Style.center}>
+        <TouchableHighlight>
+          <Entypo
+            name="chevron-small-down"
+            size={40}
+          />
+        </TouchableHighlight>
+      </View>
+    );
+  }
+
   _renderControl(code, appToken, action) {
       if (!this.state.connected) {
           return (
@@ -124,15 +153,15 @@ export default class ConnectionInput extends Component {
                 <Text style={Style.buttonText}>SCAN</Text>
               </TouchableHighlight>
               </View>
-              <View style={Style.section}>
+              <View>
+                <Text>OR{'\n'}</Text>
+              </View>
+              <View>
                 <TextInput
                   style={[Style.textInput,Style.eventCode]}
                   ref="code"
                   onChangeText={(code) => this.setState({code})} 
                   value={code} />
-              </View>
-              <View>
-                <Text>OR{'\n'}</Text>
               </View>
               <TouchableHighlight 
                 style={Style.button}
@@ -147,11 +176,12 @@ export default class ConnectionInput extends Component {
       if (this.state.connected){
         return (
           <View style={Style.center}>
-            <Text style={Style.sectionText}>Now Presenting: </Text>
+            <Text style={Style.sectionText}></Text>
             <View style={[Style.row, Style.eventPanelControl]}>
+              {this._renderPrev()}
               {this._renderPlay()}
               <TouchableHighlight 
-                  style={Style.button}
+                  style={Style.controlButton}
                   onPress={this.sendNext}
                 >
                 <Entypo
@@ -165,11 +195,25 @@ export default class ConnectionInput extends Component {
       }
   }
 
+  _renderPrev() {
+    return (
+      <TouchableHighlight 
+        style={Style.controlButton}
+        onPress={this.sendPrev}
+      >
+        <Entypo
+          name="controller-jump-to-start"
+          size={40}
+        />
+      </TouchableHighlight>
+    )
+  }
+
   _renderPlay() {
     if (this.state.paused){
       return (
         <TouchableHighlight 
-          style={Style.button}
+          style={Style.controlButton}
           onPress={this.sendStart}
         >
           <Entypo
@@ -182,7 +226,7 @@ export default class ConnectionInput extends Component {
     if (!this.state.paused){
       return (
         <TouchableHighlight 
-          style={Style.button}
+          style={Style.controlButton}
           onPress={this.sendPause}
         >
           <Entypo
@@ -201,6 +245,7 @@ export default class ConnectionInput extends Component {
 
     return (
       <View style={[Style.overlayScreen]}>
+        {this._renderChevron()}  
         {this._renderControl(code, appToken, action)}  
       </View>
     );

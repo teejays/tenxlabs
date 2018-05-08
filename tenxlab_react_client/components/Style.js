@@ -78,6 +78,12 @@ var Style = {
 		marginLeft: 3,
 		marginRight: 3
 	},
+	controlButton: {
+		backgroundColor: secondColor,
+		padding: 10,
+		marginLeft: 3,
+		marginRight: 3
+	},
 	buttonText:{
 		fontSize: 12,
 		fontWeight: 'bold',
