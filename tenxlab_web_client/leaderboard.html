@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		 <!-- Required meta tags -->
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- JQuery -->
+		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+		<!-- Chart.js -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
+
+		<!-- Style and Fonts -->
+		<link rel="stylesheet" href="styles.css" type="text/css" />
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat|Muli|Roboto" rel="stylesheet">
+
+		<title>10x Leaderboard</title>
+
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<!-- Navigation Bar -->
+			<div class="row">
+        		<nav class="col navbar navbar-dark bg-dark">
+				  <a class="navbar-brand" href="index.html">
+				    <img style="height: 40px" src="http://www.nextjump.com/wp-content/uploads/2016/09/nxj-icon.png" alt="">
+				    <div class="navbar-brand-name heading">&nbsp; 10x Screencast&nbsp; <span class="" aria-hidden="true"></span></div>
+				  </a>
+				</nav>
+   			</div>
+
+			<canvas 
+				id="bar-chart-grouped" 
+				width="800" 
+				height="350"
+			>		
+			</canvas>
+		</div>
+
+		<script type="text/javascript">
+			console.log("fuck my life");
+			new Chart(document.getElementById("bar-chart-grouped"), {
+			    type: 'bar',
+			    data: {
+			      labels: ["Candy", "Nina", "Talha"],
+			      datasets: [
+			        {
+			          label: "1",
+			          backgroundColor: "#e74c3c",
+			          data: [0,9,3]
+			        }, {
+			          label: "2",
+			          backgroundColor: "#f49a13",
+			          data: [8,7,13]
+			        }, {
+			          label: "3",
+			          backgroundColor: "#6fc055",
+			          data: [7,3,5]
+			        }, {
+			          label: "4",
+			          backgroundColor: "#00abd5",
+			          data: [1,0,0]
+			        }
+			      ]
+			    },
+			    options: {
+			      title: {
+			        display: true,
+			        text: 'Hackathon Engineering 10x Leaderboard',
+			        fontSize: 28
+			      }
+			    }
+			});
+		</script>
+
+	</body>
+</html>
