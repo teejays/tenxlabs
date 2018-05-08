@@ -124,7 +124,7 @@
 
 			var tenxApp = tenxApp || window.Object; 
 
-			tenxApp.isDevelopment = false; 
+			tenxApp.isDevelopment = true; 
 
 			tenxApp.WebSocketHandler = {
 				// wsUrl: "ws://localhost:3000/ws",
@@ -282,7 +282,7 @@
 						case "Presentation":
 							timerEventActivity = "Presentation by";
 							timerEventTitle = timerEvent.Title;
-							timerEventDesc = "Use your pen and paper for notes";
+							timerEventDesc = "Audience, use your pen and paper for notes";
 							break;
 						case "Feedback":
 							if (timerEvent.Title == 'Audience Feeback') {
@@ -377,6 +377,7 @@
 				total_seconds: null,
 				remaining_seconds: null,
 				is_running: false,
+				is_flashing: false,
 
 				setTimerSeconds: function(nano_secs) {
 					this.total_seconds = nano_secs / (1000000000); // convert nanoseconds to seconds
@@ -400,11 +401,20 @@
 				},
 
 				startFlashTime: function() {
-					$("#timer-countdown").addClass("times-up");
+					if (!this.is_flashing) {
+						$("#timer-countdown").addClass("times-up");
+						$("#timer-countdown").addClass("animated flash");
+						this.is_flashing = true;
+					}
+					
 				},
 
 				removeFlashTime: function() {
-					$("#timer-countdown").removeClass("times-up");
+					if (this.is_flashing) {
+						$("#timer-countdown").removeClass("times-up");
+						$("#timer-countdown").removeClass("animate infinite flash");
+						this.is_flashing = false;
+					}
 				},
 
 				beginTimer: function() {
@@ -426,13 +436,12 @@
 						}
 						//sound effects
 						if (self.remaining_seconds <= 10 && self.remaining_seconds > 0) {
-							var timerCountdown = document.getElementById("player-countdown");
-							timerCountdown.play();
+							document.getElementById("player-countdown").play();
+							self.startFlashTime();
 						} 
 
 						else if (self.remaining_seconds <= 0) {
-							self.pauseTimer();
-							self.startFlashTime();
+							self.endCurrentTimer();
 							var timerEnd = document.getElementById("player-timeup");
 							timerEnd.play();
 							// go to the next event
@@ -444,6 +453,11 @@
 
 						}
 					}, 1000);
+				},
+
+				endCurrentTimer: function() {
+					clearInterval(this.interval);
+					this.is_running = false;
 				},
 
 				pauseTimer: function() {
@@ -491,10 +505,10 @@
 						newest_on_top: false,
 						showProgressbar: false,
 						placement: {
-							from: "top",
+							from: "bottom",
 							align: "right"
 						},
-						offset: {x: 20, y: 80},
+						offset: {x: 20, y: 100},
 						spacing: 10,
 						z_index: 1031,
 						delay: duration,
