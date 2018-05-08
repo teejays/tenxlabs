@@ -104,6 +104,10 @@ h1, h2, h3, h4, h5, h6, .heading {
 	font-size: 2em;	
 }
 
+#run-modal-subtitle {
+	font-size: 1em;	
+}
+
 #timer-countdown {
 	color: darkslategray;
 }
@@ -123,10 +127,10 @@ h1, h2, h3, h4, h5, h6, .heading {
 
 #timer-event-info-activity {
 	font-size: 1em;
+	font-weight: bold;
 }
 #timer-event-info-title {
 	font-size: 3em;
-	font-weight: bold;
 }
 #timer-event-info-description {
 	font-size: 1em;
@@ -134,8 +138,9 @@ h1, h2, h3, h4, h5, h6, .heading {
 
 #timer-event-progress-bar {
   width: 100%;
-  margin: 30px auto;
-  height: 22px;
+  position: absolute;
+  bottom: 0px;
+  height: 40px;
   background-color: lightgray;
 }
 
@@ -144,9 +149,13 @@ h1, h2, h3, h4, h5, h6, .heading {
   width: 100%;
   text-align: right;
   padding: 0 10px;
-  line-height: 22px; /* same as #timer-progress-bar height if we want text middle aligned */
+  line-height: 40px; /* same as #timer-progress-bar height if we want text middle aligned */
   font-size: 0.6em;
   color: white;
   background-color: darkslategray;
   box-sizing: border-box;
+}
+
+.alert-notify-info {
+	background-color: #efefef;
 }
