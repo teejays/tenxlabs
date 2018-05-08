@@ -66,12 +66,9 @@ h1, h2, h3, h4, h5, h6, .heading {
 
 /* Connect Modal */
 
-#connect-modal, #tutorial-modal {
+#connect-modal, #tutorial-modal, #run-modal {
 	background: #efefef; 
-	padding: 80px 40px 40px 40px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	padding: 40px 40px 40px 40px;
 }
 
 #connect-modal-heading, #tutorial-modal-heading {
@@ -79,8 +76,9 @@ h1, h2, h3, h4, h5, h6, .heading {
 }
 
 #connect-modal-description, #tutorial-modal-description {
-	font-size: 1em;	
+	font-size: 1.5em;	
 	margin-top: 20px;
+	color: #666666;
 }
 
 #connect-modal-qrcode {
@@ -94,9 +92,9 @@ h1, h2, h3, h4, h5, h6, .heading {
 }
 
 /* Tutorial Modal */
-#tutorial-modal-content{
+
+#tutorial-modal-content {
 	margin-top: 8%;
-	font-size:1em;
 }
 
 #tutorial-modal-carousel{
@@ -104,12 +102,12 @@ h1, h2, h3, h4, h5, h6, .heading {
 }
 
 #tutorial-modal-carousel{
-  width:640px;
+  /*width:640px;*/
   height:360px;
 }
 
 .tutorial-modal-text {
-	font-size:22px;
+	font-size:2em;
 }
 
 
@@ -121,8 +119,7 @@ h1, h2, h3, h4, h5, h6, .heading {
 }
 
 #run-modal-title {
-	margin-top: 40px;
-	font-size: 2em;	
+	font-size: 2.5em;	
 }
 
 #run-modal-subtitle {
@@ -139,7 +136,7 @@ h1, h2, h3, h4, h5, h6, .heading {
 }
 
 #timer-time {
-	font-size: 9em;
+	font-size: 8em;
 }
 
 .timer-time-unit {
@@ -151,10 +148,10 @@ h1, h2, h3, h4, h5, h6, .heading {
 	font-weight: bold;
 }
 #timer-event-info-title {
-	font-size: 3em;
+	font-size: 2.5em;
 }
 #timer-event-info-description {
-	font-size: 1em;
+	font-size: 1.5em;
 }
 
 #timer-event-progress-bar {

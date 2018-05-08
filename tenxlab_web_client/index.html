@@ -45,7 +45,7 @@
 
 			<!-- Connection Modal -->
 	
-			<div id="connect-modal">
+			<div id="connect-modal" class="row flexbox">
 				<div id="connect-modal-heading" class="heading">
 					Screencast 10x 
 				</div>
@@ -60,24 +60,21 @@
 
 			<!-- Tutorial Modal -->
 	
-			<div id="tutorial-modal" class="hide">
+			<div id="tutorial-modal" class="row hide flexbox">
 				<div id="tutorial-modal-heading" class="heading center-content">
 					Welcome to 10x
 				</div>
 
 				<div id="tutorial-modal-description" class="center-content">
-					Press START On Your App To Begin
+					Press start on your 10x Admin App to begin
 				</div>
 				
 				<div id="tutorial-modal-content"  class="center-content">
-					<div id="tutorial-modal-description" class="center-content">
-						TIP:
-					</div>
 					<!--Boostrap Carousel-->
 					<div id="tutorial-modal-carousel" class="carousel slide" data-ride="carousel">
 					  	<div class="carousel-inner" role="listbox">
 						    <div class="carousel-item tutorial-modal-text active">
-						      <div>Make sure you have <b>pen and paper</b> with you to take notes-- this engages your brain more!</div>
+						      <div> Make sure you have <b>pen and paper</b> with you to take notes-- this engages your brain more!</div>
 						    </div>
 						    <div class="carousel-item tutorial-modal-text">
 						      <div>Listen to the presenters and jot down key takeaways to help you construct your feedback.</div>
@@ -96,19 +93,13 @@
 				</div>
 			</div>
 		
-		<div id="run-modal" class="hide flexbox">
+		<div id="run-modal" class="row hide flexbox">
 
 			<div id="run-modal-title"></div> <!-- this could be the event title -->
 			<div id="run-modal-subtitle"></div> <!-- this could be the sub event title -->
 
 			<div id="timer-countdown" class="flexbox">
 				<div id="timer-time"></div>
-				<audio controls id="player-countdown" style="display: none">
-					<source id="player-countdown-src" src="./Tick.mp3"></source>
-				</audio>
-				<audio controls id="player-timeup" style="display: none">
-					<source id="player-timeup-src" src="./Digital_Watch_Alarm_Long.mp3"></source>
-				</audio>
 			</div>
 
 			<div id="timer-event-info">
@@ -122,6 +113,15 @@
 			</div>
 		</div>
 
+	</div>
+
+	<div style="display: none;">
+		<audio controls id="player-countdown" style="display: none">
+			<source id="player-countdown-src" src="./Tick.mp3"></source>
+		</audio>
+		<audio controls id="player-timeup" style="display: none">
+			<source id="player-timeup-src" src="./Digital_Watch_Alarm_Long.mp3"></source>
+		</audio>
 	</div>
 
 		<!-- Bootstrap JS -->
@@ -518,7 +518,7 @@
 							from: "bottom",
 							align: "right"
 						},
-						offset: {x: 20, y: 100},
+						offset: {x: 20, y: 150},
 						spacing: 10,
 						z_index: 1031,
 						delay: duration,
