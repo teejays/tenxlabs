@@ -161,7 +161,7 @@ export default class EventScreen extends Component {
         
         
         <View style={Style.section}> 
-          <Button title='Start Event' onPress={() => this.setState({visible: true})} />
+          <Button title='Start Event' onPress={() => this.setState({visible: !this.visible})} />
           <SlidingUpPanel
             visible={this.state.visible}
             showBackdrop={this.state.showBackdrop}

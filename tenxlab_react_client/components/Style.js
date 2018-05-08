@@ -6,6 +6,7 @@
 var bgColor = '#FFF';
 var mainColor = '#F06023';
 var secondColor = '#A9A9A9';
+var modalColor = '#EFEFEF';
 
 var Style = {
 
@@ -19,10 +20,19 @@ var Style = {
     	backgroundColor: mainColor
 	},
 	screen:{
-		flex: 1,
-    	//justifyContent: 'center',
-    	alignItems: 'center',
     	backgroundColor: bgColor
+	},
+	overlayScreen:{
+    	backgroundColor: modalColor,
+    	position: 'absolute',
+    	flex: 1,
+    	width: 380,
+    	borderRadius: 10,
+    	borderColor:'black',
+    	height: 500,
+    	width: 380,
+    	marginTop: -120,
+    	paddingTop: 20
 	},
 	scrollScreen:{
 		flex: 1,
@@ -45,8 +55,8 @@ var Style = {
     	alignItems: 'center',
 	},
 	textInput:{
-		borderBottomColor: 'black',
-		borderBottomWidth: 2,
+		borderColor: 'black',
+		borderWidth: 1,
 		width: 200,
 		textAlign: 'center'
 	},
@@ -63,17 +73,25 @@ var Style = {
 	    margin: 10
 	},
 	button: {
+		backgroundColor: mainColor,
+		padding: 10,
+		marginLeft: 3,
+		marginRight: 3
+	},
+	controlButton: {
 		backgroundColor: secondColor,
 		padding: 10,
 		marginLeft: 3,
 		marginRight: 3
 	},
 	buttonText:{
-		fontSize: 18,
+		fontSize: 12,
+		fontWeight: 'bold',
 		color: '#FFF'
 	},
 	sectionText: {
-		marginTop: 10
+		marginTop: 10,
+		fontWeight: 'bold'
 	},
 	left: {
 		alignSelf: 'flex-start',
