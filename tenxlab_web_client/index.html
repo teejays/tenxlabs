@@ -185,7 +185,7 @@
 									break;
 
 								case "Next":
-									tenxApp.Webclient.nextTimerEvent();
+									tenxApp.Webclient.nextTimerEventWithNotification();
 									break;
 
 								case "Previous":
@@ -208,7 +208,7 @@
 				hasEventStarted: false,
 				hasTimerEventStarted: false,
 				voiceOverText: "",
-
+				voiceTimeouts: [],
 				
 				init: function() {
 					tenxApp.WebSocketHandler.init();
@@ -262,6 +262,19 @@
 				},
 				
 				nextSubEvent: function() {
+					// check if this was the last event
+					// last subEvent
+					if (this.currentSubEventId == this.eventData.SubEvents.length - 1) {
+						this.showNotification("fa fa-hourglass-end", "&nbsp;Event Ended", "notify-info", 2000);
+					} else {
+						this.currentSubEventId += 1;
+						this.currentTimerEventId = 0;
+						this.setCurrentSubEvent();
+						this.beginCurrentTimerEvent();
+					}
+				},
+
+				nextSubEventWithNotification: function() {
 					// check if this was the last event
 					// last subEvent
 					if (this.currentSubEventId == this.eventData.SubEvents.length - 1) {
@@ -369,21 +382,22 @@
 				},
 
 				beginCurrentTimerEvent: function() {
+					var self = this;
 					this.setCurrentTimerEvent();
 					var timerEvent = this.getCurrentTimerEvent();
 					
 					if (timerEvent.ActivityType == "Feedback" && timerEvent.Title == 'Judge Scoring') {
 						tenxApp.Timer.beginTimer();
 						responsiveVoice.speak("Judges, use the 10x paddles to score");
-						setTimeout(function() {
+						self.voiceTimeouts[self.voiceTimeouts.length] = setTimeout(function() {
 							responsiveVoice.speak("Show scores in");
-							setTimeout(function() {
+							self.voiceTimeouts[self.voiceTimeouts.length] = setTimeout(function() {
 								responsiveVoice.speak("four...");
-								setTimeout(function() {
+								self.voiceTimeouts[self.voiceTimeouts.length] = setTimeout(function() {
 									responsiveVoice.speak("three...");
-									setTimeout(function() {
+									self.voiceTimeouts[self.voiceTimeouts.length] = setTimeout(function() {
 										responsiveVoice.speak("two...");
-										setTimeout(function() {
+										self.voiceTimeouts[self.voiceTimeouts.length] = setTimeout(function() {
 											responsiveVoice.speak("one...");
 										}, 1000);
 									}, 1000);
@@ -398,6 +412,29 @@
 						}, 4000);
 					}
 
+				},
+
+				nextTimerEventWithNotification: function() {
+					if (!this.hasEventStarted) {
+						return;
+					}
+
+					// first, just pause the timer since the current timer event is no longer important.
+					tenxApp.Timer.endCurrentTimer();
+					for (var i = this.voiceTimeouts.length - 1; i >= 0; i--) {
+						clearTimeout(this.voiceTimeouts[i]);
+					}
+					
+					// check if the current subEvent has a next timer event
+					// if last timer event in the sub event
+					if (this.currentTimerEventId == this.getCurrentSubEvent().TimerEvents.length - 1) {
+						this.nextSubEventWithNotification();
+
+					} else {
+						this.currentTimerEventId += 1
+						tenxApp.Notify.showNotification("fa fa-step-forward", "&nbsp;Next Activity", "notify-info", 2000);
+						this.beginCurrentTimerEvent();
+					}
 				},
 
 				nextTimerEvent: function() {
@@ -415,7 +452,6 @@
 
 					} else {
 						this.currentTimerEventId += 1
-						tenxApp.Notify.showNotification("fa fa-step-forward", "&nbsp;Next Activity", "notify-info", 2000);
 						this.beginCurrentTimerEvent();
 					}
 				},
@@ -502,7 +538,7 @@
 				startFlashTime: function() {
 					if (!this.is_flashing) {
 						$("#timer-countdown").addClass("times-up");
-						$("#timer-countdown").addClass("animated flash");
+						$("#timer-countdown").addClass("animated infinite flash");
 						this.is_flashing = true;
 					}
 					
@@ -533,9 +569,10 @@
 						if (self.remaining_seconds > 0){
 							self.decrementTimer();
 						}
-						//sound effects
+						
 						if (self.remaining_seconds == 10) {
-							document.getElementById("player-countdown").play();
+							document.getElementById("player-countdown").play(); //sound effects
+							// also show the next upcoming notification
 							var ids = tenxApp.Webclient.getIdsForNextTimerEvent();
 							if (ids.isSet) {
 								var upcomingTimerEvent = tenxApp.Webclient.getTimerEventInfoById(ids.subEventId, ids.timerEventId);
@@ -548,13 +585,22 @@
 						
 						} else if (self.remaining_seconds <= 0) {
 							self.endCurrentTimer();
+							
+							// start the alarm sound effect
 							var timerEnd = document.getElementById("player-timeup");
 							timerEnd.play();
-							// go to the next event
+
+							// go to the next event after waiting for a bit
 							setTimeout(function(){ 
 								tenxApp.Webclient.nextTimerEvent(); 
+								
+								// start the alarm sound effect
 								timerEnd.pause();
 								timerEnd.currentTime = 0;
+
+								// remove flashing
+								self.removeFlashTime();
+
 							}, 3000);
 
 						}
