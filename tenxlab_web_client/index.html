@@ -538,7 +538,7 @@
 				startFlashTime: function() {
 					if (!this.is_flashing) {
 						$("#timer-countdown").addClass("times-up");
-						$("#timer-countdown").addClass("animated infinite flash");
+						$("#timer-countdown").addClass("animated flash");
 						this.is_flashing = true;
 					}
 					
@@ -547,7 +547,7 @@
 				removeFlashTime: function() {
 					if (this.is_flashing) {
 						$("#timer-countdown").removeClass("times-up");
-						$("#timer-countdown").removeClass("animate infinite flash");
+						$("#timer-countdown").removeClass("animate flash");
 						this.is_flashing = false;
 					}
 				},
