@@ -34,7 +34,6 @@ var Style = {
     	borderColor:'black',
     	height: 538,
     	paddingTop: 20,
-    	marginTop: -320,
     	width: width
 	},
 	scrollScreen:{
@@ -83,7 +82,7 @@ var Style = {
 		marginRight: 3
 	},
 	controlButton: {
-		backgroundColor: secondColor,
+		//backgroundColor: secondColor,
 		padding: 10,
 		marginLeft: 3,
 		marginRight: 3

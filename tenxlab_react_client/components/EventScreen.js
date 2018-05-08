@@ -35,16 +35,19 @@ export default class EventScreen extends Component {
       event: TenXEvents[0],
       visible: false,
       allowMomentum: true,
-      showBackdrop: false
+      showBackdrop: false,
+      isConnected: 'no'
     };
 
-    //this.getEvents = this.getEvents.bind(this);
     this.logEvents = this.logEvents.bind(this);
-    //this.getEvents();
   }
 
   capitalize(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  updateState (data) {
+    this.setState(data);
   }
 
   getEvents() {
@@ -75,7 +78,7 @@ export default class EventScreen extends Component {
   render () {
 
     // declare to be used in render
-    const { event } = this.state;
+    const { event, isConnected } = this.state;
 
     // add to judgeArray
     var judgeArray = [];
@@ -87,16 +90,8 @@ export default class EventScreen extends Component {
     return (
       <View style={Style.screen}>
 
-        <TouchableHighlight onPress={this.logEvents}>
-          <Text></Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight onPress={this.getEvents}>
-          <Text></Text>
-        </TouchableHighlight>
-
         // title
-        <View style={[Style.center]}>
+        <View style={[Style.center,{marginTop:20}]}>
           <Text style={Style.title}>{this.capitalize(event.Name)}</Text>
           <Text style={[{textAlign:'center'}]}>
             {'\n'}
@@ -173,7 +168,7 @@ export default class EventScreen extends Component {
             allowMomentum={this.state.allowMomentum}
             onRequestClose={() => this.setState({visible: false})}>
             <View style={Style.eventPanel}>
-              <ConnectionInput/>
+              <ConnectionInput updateParentState={this.updateState.bind(this)}/>
             </View>
           </SlidingUpPanel>
         </View>

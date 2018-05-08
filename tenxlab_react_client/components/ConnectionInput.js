@@ -33,13 +33,14 @@ export default class ConnectionInput extends Component {
     
     // define default states
     this.state = {
-        margin: -120,
         code: "",
         appToken: "",
         eventId: 1,
         connected: false,
+        eventStarted: false,
         paused: true,
-        startAction: 'start'
+        startAction: 'start',
+        margin: -320
     }
     
     this.connectServer = this.connectServer.bind(this);
@@ -53,11 +54,8 @@ export default class ConnectionInput extends Component {
 * Methods
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-  _keyboardWillShow(e) {
-    this.setState({margin: -330});
-  }
-  _keyboardWillHide(e) {
-    this.setState({margin: -220});
+  updateParentState(data) {
+    this.props.updateParentState(data);
   }
 
   setAppToken = (response) => this.setState({ appToken: response });
@@ -71,14 +69,15 @@ export default class ConnectionInput extends Component {
       .then(response => {
         this.setAppToken(response.data);
         if(response.status == 200){
-          this.setState({connected: true})
+          this.setState({connected: true});
+          this.updateParentState({isConnected: 'yes'});
         }
       })
       .catch(error => console.log(error));
   }
 
   sendStart() {
-    const { appToken, startAction } = this.state;
+    const { appToken, startAction, eventStarted } = this.state;
     
     axios.post('http://34.211.129.88:3000/screen/control',{
       "appToken": appToken,
@@ -89,6 +88,9 @@ export default class ConnectionInput extends Component {
         if(response.status == 200){
           this.setState({paused: false})
           this.setState({startAction: 'resume'})
+        }
+        if(!eventStarted){
+          this.setState({eventStarted: true});
         }
       })
       .catch(error => console.log(error));
@@ -180,7 +182,23 @@ export default class ConnectionInput extends Component {
               </TouchableHighlight>
             </View>
           );
-      } 
+      }
+
+      if (this.state.connected && !this.state.eventStarted) {
+          return (
+            <View style={[Style.center,Style.section]}>
+              <View style={Style.section}>
+              <Text>{'\n'}{'\n'}</Text>
+              <TouchableHighlight 
+                style={Style.button}
+                onPress={this.sendStart}
+              >
+                <Text style={Style.buttonText}>START 10x</Text>
+              </TouchableHighlight>
+              </View>
+            </View>
+          );
+      }  
 
       if (this.state.connected){
         return (
@@ -253,7 +271,7 @@ export default class ConnectionInput extends Component {
     const { code, appToken, action, margin } = this.state;
 
     return (
-      <KeyboardAvoidingView style={[Style.overlayScreen]}>
+      <KeyboardAvoidingView style={[Style.overlayScreen,{marginTop: margin}]}>
         {this._renderChevron()}  
         {this._renderControl(code, appToken, action)}  
       </KeyboardAvoidingView>
