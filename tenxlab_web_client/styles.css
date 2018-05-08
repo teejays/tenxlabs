@@ -95,7 +95,7 @@ h1, h2, h3, h4, h5, h6, .heading {
 
 /* Tutorial Modal */
 #tutorial-modal-content{
-	margin-top: 3%;
+	margin-top: 8%;
 	font-size:1em;
 }
 
@@ -106,6 +106,10 @@ h1, h2, h3, h4, h5, h6, .heading {
 #tutorial-modal-carousel{
   width:640px;
   height:360px;
+}
+
+.tutorial-modal-text {
+	font-size:22px;
 }
 
 
