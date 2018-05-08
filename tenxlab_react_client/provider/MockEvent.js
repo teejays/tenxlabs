@@ -75,7 +75,244 @@ var nayan = new Person("Nayan Busa", "21046359");
 
 var mockEvent1 = new TenXEvent("skills", "May Skills 10X", "2018-05-05 09:00:00", 3600, [abhay, supriya, darrell], [tom, xuelan, nayan], 300, 120, 120);
 
-var TenXEvents = [mockEvent1];
+var mockEvent2 = {
+        "Id": 2,
+        "EventType": "Engineering",
+        "Name": "Hackathon Engineering 10x",
+        "DatetimeStart": "2018-05-08T12:00:00Z",
+        "Presenters": [
+            {
+                "Id": 77576938,
+                "Name": "Candy Lin"
+            },
+            {
+                "Id": 77576940,
+                "Name": "Nina Sabado"
+            },
+            {
+                "Id": 58769919,
+                "Name": "Talha Ansari"
+            }
+        ],
+        "Judges": [
+            {
+                "Id": 493,
+                "Name": "Charlie Kim"
+            },
+            {
+                "Id": 1391739,
+                "Name": "Meghan Messenger"
+            },
+            {
+                "Id": 1091147,
+                "Name": "Tom Fuller"
+            },
+            {
+                "Id": 46,
+                "Name": "Greg Kunkel"
+            }
+        ],
+        "EventDuration": 3600000000000,
+        "PresentationDuration": 360000000000,
+        "AudienceFeedbackDuration": 180000000000,
+        "JudgeFeedbackDuration": 180000000000,
+        "SubEvents": [
+            {
+                "Presenter": {
+                    "Id": 77576938,
+                    "Name": "Candy Lin"
+                },
+                "Judges": [
+                    {
+                        "Id": 493,
+                        "Name": "Charlie Kim"
+                    },
+                    {
+                        "Id": 1391739,
+                        "Name": "Meghan Messenger"
+                    },
+                    {
+                        "Id": 1091147,
+                        "Name": "Tom Fuller"
+                    },
+                    {
+                        "Id": 46,
+                        "Name": "Greg Kunkel"
+                    }
+                ],
+                "PresentationDuration": 360000000000,
+                "AudienceFeedbackDuration": 180000000000,
+                "JudgeFeedbackDuration": 180000000000,
+                "TimerEvents": [
+                    {
+                        "ActivityType": "Presentation",
+                        "Title": "Candy Lin",
+                        "Duration": 360000000000
+                    },
+                    {
+                        "ActivityType": "Feedback",
+                        "Title": "Audience Feeback",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Feedback",
+                        "Title": "Judge Scoring",
+                        "Duration": 20000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Charlie Kim",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Meghan Messenger",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Tom Fuller",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Greg Kunkel",
+                        "Duration": 180000000000
+                    }
+                ]
+            },
+            {
+                "Presenter": {
+                    "Id": 77576940,
+                    "Name": "Nina Sabado"
+                },
+                "Judges": [
+                    {
+                        "Id": 493,
+                        "Name": "Charlie Kim"
+                    },
+                    {
+                        "Id": 1391739,
+                        "Name": "Meghan Messenger"
+                    },
+                    {
+                        "Id": 1091147,
+                        "Name": "Tom Fuller"
+                    },
+                    {
+                        "Id": 46,
+                        "Name": "Greg Kunkel"
+                    }
+                ],
+                "PresentationDuration": 360000000000,
+                "AudienceFeedbackDuration": 180000000000,
+                "JudgeFeedbackDuration": 180000000000,
+                "TimerEvents": [
+                    {
+                        "ActivityType": "Presentation",
+                        "Title": "Nina Sabado",
+                        "Duration": 360000000000
+                    },
+                    {
+                        "ActivityType": "Feedback",
+                        "Title": "Audience Feeback",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Feedback",
+                        "Title": "Judge Scoring",
+                        "Duration": 20000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Charlie Kim",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Meghan Messenger",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Tom Fuller",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Greg Kunkel",
+                        "Duration": 180000000000
+                    }
+                ]
+            },
+            {
+                "Presenter": {
+                    "Id": 58769919,
+                    "Name": "Talha Ansari"
+                },
+                "Judges": [
+                    {
+                        "Id": 493,
+                        "Name": "Charlie Kim"
+                    },
+                    {
+                        "Id": 1391739,
+                        "Name": "Meghan Messenger"
+                    },
+                    {
+                        "Id": 1091147,
+                        "Name": "Tom Fuller"
+                    },
+                    {
+                        "Id": 46,
+                        "Name": "Greg Kunkel"
+                    }
+                ],
+                "PresentationDuration": 360000000000,
+                "AudienceFeedbackDuration": 180000000000,
+                "JudgeFeedbackDuration": 180000000000,
+                "TimerEvents": [
+                    {
+                        "ActivityType": "Presentation",
+                        "Title": "Talha Ansari",
+                        "Duration": 360000000000
+                    },
+                    {
+                        "ActivityType": "Feedback",
+                        "Title": "Audience Feeback",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Feedback",
+                        "Title": "Judge Scoring",
+                        "Duration": 20000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Charlie Kim",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Meghan Messenger",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Tom Fuller",
+                        "Duration": 180000000000
+                    },
+                    {
+                        "ActivityType": "Judge Feedback",
+                        "Title": "Greg Kunkel",
+                        "Duration": 180000000000
+                    }
+                ]
+            }
+        ]
+    }
+
+var TenXEvents = [mockEvent2];
 
 export default TenXEvents;
 

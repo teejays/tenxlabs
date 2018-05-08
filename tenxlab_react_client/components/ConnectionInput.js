@@ -69,8 +69,7 @@ export default class ConnectionInput extends Component {
 
   sendStart() {
     const { appToken, startAction } = this.state;
-    console.log(appToken);
-
+    
     axios.post('http://34.211.129.88:3000/screen/control',{
       "appToken": appToken,
       "action": startAction

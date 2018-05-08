@@ -54,6 +54,6 @@ const RootStack = StackNavigator({
   }
 },
 {
-  initialRouteName: 'Event',
+  initialRouteName: 'Launch',
 }
 );

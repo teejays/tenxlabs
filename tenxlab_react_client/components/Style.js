@@ -4,7 +4,7 @@
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 var bgColor = '#FFF';
-var mainColor = '#e6e6e6';
+var mainColor = '#F06023';
 var secondColor = '#A9A9A9';
 
 var Style = {
@@ -12,9 +12,15 @@ var Style = {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Global Styling
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	screen:{
+	launch: {
 		flex: 1,
     	justifyContent: 'center',
+    	alignItems: 'center',
+    	backgroundColor: mainColor
+	},
+	screen:{
+		flex: 1,
+    	//justifyContent: 'center',
     	alignItems: 'center',
     	backgroundColor: bgColor
 	},
@@ -69,6 +75,14 @@ var Style = {
 	sectionText: {
 		marginTop: 10
 	},
+	left: {
+		alignSelf: 'flex-start',
+		marginLeft: 5
+	},
+	right: {
+  		alignSelf: 'flex-end',
+  		marginRight: 5
+	},
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Font
@@ -78,6 +92,38 @@ var Style = {
 		fontWeight: 'bold',
 		marginTop: 15
 	},
+	title: {
+  		fontSize: 20
+	},
+	subtitle: {
+  		fontSize: 12,
+	},
+	judgeSubtitle: {
+  		fontSize: 12,
+  		fontStyle: 'italic'
+	},
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+* Alignment
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	alignRow: {
+	    flexDirection: 'row',
+	    justifyContent: 'space-between',
+	    alignItems: 'center',
+	  },
+	  leftAlign: {
+	    flex: 1,
+	    marginLeft: 20,
+	    flexDirection: 'row',
+	    justifyContent: 'flex-start',
+	  },
+	  rightAlign: {
+	    flex: 1,
+	    marginRight: 20,
+	    flexDirection: 'row',
+	    justifyContent: 'flex-end',
+	    alignItems: 'center',
+	  },
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Control
