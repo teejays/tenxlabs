@@ -83,6 +83,8 @@
 
 			var tenxApp = tenxApp || window.Object; 
 
+			tenxApp.isDevelopment = true; 
+
 			tenxApp.Timer = {
 				total_seconds: null,
 				remaining_seconds: null,
@@ -170,16 +172,23 @@
 			};
 
 			tenxApp.WebSocketHandler = {
-				// wsUrl: "ws://34.211.129.88:80/ws",
-				wsUrl: "ws://34.211.129.88:3000/ws",
+				wsUrl: "ws://localhost:3000/ws",
+				// wsUrl: "ws://34.211.129.88:3000/ws",
 				socket: null,
 
 				init: function() {
 					// start the websocket 
 					this.socket = new WebSocket(this.wsUrl);
 					
+					var self = this;
 					this.socket.onopen = function(event) {
 						console.log("WebSocket Opened...");
+						if (tenxApp.isDevelopment) {
+							self.socket.send(JSON.stringify({
+	  							MessageType: "GetEvent",
+	  							Message: 1,
+							}));	
+						}
 					}
 
 					this.socket.onmessage = function(event) {
@@ -217,7 +226,7 @@
 									break;
 							}
 						}
-					}
+					};
 				},
 			}
 
@@ -309,7 +318,7 @@
 							timerEventDesc = "Use your pen and paper for notes";
 							break;
 						case "Feedback":
-							if (timerEvent.Title == 'Audience Feedback') {
+							if (timerEvent.Title == 'Audience Feeback') {
 								timerEventActivity = "Audience Feeback";
 								timerEventDesc = "Use the Feedback App to give provide feedback";
 							} else if (timerEvent.Title == 'Judge Scoring') {

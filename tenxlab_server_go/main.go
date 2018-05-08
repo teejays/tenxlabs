@@ -333,7 +333,33 @@ func handlerWs(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			// do something with the message
-			fmt.Printf("WS Message Received: %v, %v\n", msg, op)
+			var messageReceived WsMessage
+			err = json.Unmarshal(msg, &messageReceived)
+			if err != nil {
+				fmt.Printf("Error parsing WS message: %v\n", err)
+			}
+			fmt.Printf("WS Message Received: %v | op: %v\n", messageReceived, op)
+			switch messageReceived.MessageType {
+			case "GetEvent":
+				eventIdFloat, ok := messageReceived.Message.(float64)
+				if !ok {
+					fmt.Printf("WS received: error casting %v as float\n", messageReceived.Message)
+					continue
+				}
+				eventId := int(eventIdFloat)
+				if eventId < 1 {
+					fmt.Printf("WS received: event id is %d", eventId)
+				}
+				// send the event details to the client
+				event, err := getEventById(eventId)
+				if err != nil {
+					fmt.Printf("WS Received: %v\n", err)
+				}
+				err = sendWsDataByConn(conn, WsMessage{"EventData", event})
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
 		}
 	}()
 }
