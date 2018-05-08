@@ -118,17 +118,27 @@ export default class ConnectionInput extends Component {
       if (!this.state.connected) {
           return (
             <View style={[Style.center,Style.section]}>
-              <Text style={Style.sectionText}>Please Enter your code: </Text>
-              <TextInput
-                style={[Style.textInput,Style.eventCode]}
-                ref="code"
-                onChangeText={(code) => this.setState({code})} 
-                value={code} />
+              <Text style={Style.sectionText}>Connect to Screen{'\n'}</Text>
+              <View style={Style.section}>
+              <TouchableHighlight style={Style.button}>
+                <Text style={Style.buttonText}>SCAN</Text>
+              </TouchableHighlight>
+              </View>
+              <View style={Style.section}>
+                <TextInput
+                  style={[Style.textInput,Style.eventCode]}
+                  ref="code"
+                  onChangeText={(code) => this.setState({code})} 
+                  value={code} />
+              </View>
+              <View>
+                <Text>OR{'\n'}</Text>
+              </View>
               <TouchableHighlight 
                 style={Style.button}
                 onPress={this.connectServer.bind()}
               >
-                <Text style={Style.buttonText}>Connect</Text>
+                <Text style={Style.buttonText}>ENTER CODE</Text>
               </TouchableHighlight>
             </View>
           );
@@ -138,11 +148,6 @@ export default class ConnectionInput extends Component {
         return (
           <View style={Style.center}>
             <Text style={Style.sectionText}>Now Presenting: </Text>
-            <Image
-              style={Style.eventPanelIcon}
-              resizeMode={'contain'}
-              source={{uri: 'https://apps.api.nextjump.com/v1/topten/user/77576940/image'}}
-            />
             <View style={[Style.row, Style.eventPanelControl]}>
               {this._renderPlay()}
               <TouchableHighlight 
@@ -195,7 +200,7 @@ export default class ConnectionInput extends Component {
     const { code, appToken, action } = this.state;
 
     return (
-      <View style={Style.center}>
+      <View style={[Style.overlayScreen]}>
         {this._renderControl(code, appToken, action)}  
       </View>
     );
