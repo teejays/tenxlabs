@@ -32,7 +32,7 @@ var Style = {
     	flex: 1,
     	borderRadius: 10,
     	borderColor:'black',
-    	height: 538,
+    	height: 800,
     	paddingTop: 20,
     	width: width
 	},
