@@ -93,14 +93,22 @@ h1, h2, h3, h4, h5, h6, .heading {
 	font-size: 3em;
 }
 
+/* Tutorial Modal */
 #tutorial-modal-content{
-	margin-top: 15%;
+	margin-top: 3%;
 	font-size:1em;
 }
 
 #tutorial-modal-carousel{
 	display: inline-flex;
 }
+
+#tutorial-modal-carousel{
+  width:640px;
+  height:360px;
+}
+
+
 
 /* Run Modal */
 
