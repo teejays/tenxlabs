@@ -51,7 +51,7 @@
 				</div>
 
 				<div id="connect-modal-description">
-					To connect to this screen, please scan the below QR Code using your 10x Admin App or manually enter the code.
+					To pair this screen with your device, please scan the QR Code below using your 10x Admin App or manually enter the code.
 				</div>
 				
 				<div id="connect-modal-qrcode" class="center-content"></div>
@@ -435,12 +435,13 @@
 							self.decrementTimer();
 						}
 						//sound effects
-						if (self.remaining_seconds <= 10 && self.remaining_seconds > 0) {
+						if (self.remaining_seconds == 10) {
 							document.getElementById("player-countdown").play();
+						
+						} else if (self.remaining_seconds <= 10 && self.remaining_seconds > 0) {
 							self.startFlashTime();
-						} 
-
-						else if (self.remaining_seconds <= 0) {
+						
+						} else if (self.remaining_seconds <= 0) {
 							self.endCurrentTimer();
 							var timerEnd = document.getElementById("player-timeup");
 							timerEnd.play();
