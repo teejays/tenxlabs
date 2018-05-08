@@ -115,7 +115,7 @@ var Style = {
 		marginTop: 15
 	},
 	title: {
-  		fontSize: 20
+  		fontSize: 24
 	},
 	subtitle: {
   		fontSize: 12,

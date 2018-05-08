@@ -177,3 +177,11 @@ h1, h2, h3, h4, h5, h6, .heading {
 .alert-notify-info {
 	background-color: #efefef;
 }
+
+/* Common Styles */
+#bar-chart-grouped {
+	margin-top:50px;
+}
+
+
+
