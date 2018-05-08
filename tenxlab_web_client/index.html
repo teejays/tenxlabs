@@ -136,7 +136,7 @@
 
 			var tenxApp = tenxApp || window.Object; 
 
-			tenxApp.isDevelopment = false; 
+			tenxApp.isDevelopment = true; 
 
 			tenxApp.WebSocketHandler = {
 				// wsUrl: "ws://localhost:3000/ws",
@@ -189,6 +189,7 @@
 									break;
 
 								case "Previous":
+									tenxApp.Timer.endCurrentTimer();
 									tenxApp.Webclient.previousTimerEvent();
 									break;
 							}
@@ -289,41 +290,82 @@
 				},
 
 				setCurrentTimerEvent: function() {
-					var timerEvent = this.getCurrentTimerEvent();
-					var timerEventActivity = ""
-					var timerEventTitle = ""
-					var timerEventDesc = ""
+					timerEventInfo = this.getTimerEventInfoById(this.currentSubEventId, this.currentTimerEventId);
+
+					$("#timer-event-info-activity").html(timerEventInfo.Activity);
+					$("#timer-event-info-title").html(timerEventInfo.Title);
+					$("#timer-event-info-description").html(timerEventInfo.Desc);
+
+					this.voiceOverText = timerEventInfo.VoiceOverText;
+
+					tenxApp.Timer.setTimerSeconds(timerEventInfo.Duration);
+				},
+
+				getIdsForNextTimerEvent: function() {
+					var ids = {};
+					ids.isSet = false;
+					// is last timer event in the sub event
+					if (this.currentTimerEventId == this.getCurrentSubEvent().TimerEvents.length - 1) {
+						// is also the last sub event
+						if (this.currentSubEventId == this.eventData.SubEvents.length - 1) {
+							// then there is no next activity
+							console.log('Event has ended, no next activity.');
+						} else {
+							ids.subEventId = this.currentSubEventId + 1;
+							ids.timerEventId = 0;
+						}
+
+					} else {
+						// timer event is not the last event in the sub event
+						ids.subEventId = this.currentSubEventId;
+						ids.timerEventId = this.currentTimerEventId + 1;
+					}
+					ids.isSet = true;
+					return ids;
+				},
+
+				getTimerEventInfoById: function(subEventId, timerEventId){
+					var timerEvent = this.eventData.SubEvents[subEventId].TimerEvents[timerEventId];
+					var timerEventInfo = {};
+
+					timerEventInfo.Activity = "";
+					timerEventInfo.Title = "";
+					timerEventInfo.Desc = "";
+					timerEventInfo.NotificationText = "";
+					timerEventInfo.VoiceOverText = "";
+					timerEventInfo.Duration = timerEvent.Duration;
 					
 					switch (timerEvent.ActivityType) {
 						case "Presentation":
-							timerEventActivity = "Presentation by";
-							timerEventTitle = timerEvent.Title;
-							timerEventDesc = "Audience, use your pen and paper for notes";
-							this.voiceOverText = "Presentation by " + timerEvent.Title + " starting now.";
+							timerEventInfo.Activity = "Presentation by";
+							timerEventInfo.Title = timerEvent.Title;
+							timerEventInfo.Desc = "Audience, use your pen and paper for notes";
+							timerEventInfo.NotificationText = "Presentation by " + timerEvent.Title;
+							timerEventInfo.VoiceOverText = "Presentation by " + timerEvent.Title + " starting now.";
 							break;
 						case "Feedback":
 							if (timerEvent.Title == 'Audience Feeback') {
-								timerEventActivity = "Audience Feedback";
-								timerEventDesc = "Audience, use the Feedback App to give feedback";
-								this.voiceOverText = "Audience, please use the feedback app to give feedback to " + this.getCurrentSubEvent().Presenter.Name;
+								timerEventInfo.Activity = "Audience Feedback";
+								timerEventInfo.Desc = "Audience, use the Feedback App to give feedback";
+								timerEventInfo.NotificationText = "Audience Feedback Time";
+								timerEventInfo.VoiceOverText = "Audience, please use the feedback app to give feedback to " + this.getCurrentSubEvent().Presenter.Name;
 							} else if (timerEvent.Title == 'Judge Scoring') {
-								timerEventActivity = "Judge Scoring";
-								timerEventDesc = "Judges, use the 10x paddles to score";
-								this.voiceOverText = "Judges, please use the paddles to score from one to four. Show your scores in four..........      three..........      two..........      ONE...";
+								timerEventInfo.Activity = "Judge Scoring";
+								timerEventInfo.NotificationText = "Judges' Paddle Scoring";
+								timerEventInfo.Desc = "Judges, use the 10x paddles to score";
+								timerEventInfo.VoiceOverText = ""; // to be constrcuted later
 							}
 							break;
 						case "Judge Feedback":
-							timerEventActivity = "Judge's Feedback by";
-							timerEventTitle = timerEvent.Title;
-							this.voiceOverText = "";
+							timerEventInfo.Activity = "Judge's Feedback by";
+							timerEventInfo.Title = timerEvent.Title;
+							timerEventInfo.NotificationText = "Judge's Feedback by " + timerEvent.Title;
+							timerEventInfo.VoiceOverText = "";
 							break;
 						}
 
-					$("#timer-event-info-activity").html(timerEventActivity);
-					$("#timer-event-info-title").html(timerEventTitle);
-					$("#timer-event-info-description").html(timerEventDesc);
+						return timerEventInfo;
 
-					tenxApp.Timer.setTimerSeconds(timerEvent.Duration);
 				},
 
 				beginCurrentTimerEvent: function() {
@@ -347,11 +389,13 @@
 									}, 1000);
 								}, 1000);
 							}, 2000);
-						}, 6000);
+						}, 4000);
 					
 					} else {
 						responsiveVoice.speak(this.voiceOverText);
-						tenxApp.Timer.beginTimer();
+						setTimeout(function() {
+							tenxApp.Timer.beginTimer();
+						}, 4000);
 					}
 
 				},
@@ -360,6 +404,10 @@
 					if (!this.hasEventStarted) {
 						return;
 					}
+
+					// first, just pause the timer since the current timer event is no longer important.
+					tenxApp.Timer.endCurrentTimer();
+
 					// check if the current subEvent has a next timer event
 					// if last timer event in the sub event
 					if (this.currentTimerEventId == this.getCurrentSubEvent().TimerEvents.length - 1) {
@@ -488,6 +536,12 @@
 						//sound effects
 						if (self.remaining_seconds == 10) {
 							document.getElementById("player-countdown").play();
+							var ids = tenxApp.Webclient.getIdsForNextTimerEvent();
+							if (ids.isSet) {
+								var upcomingTimerEvent = tenxApp.Webclient.getTimerEventInfoById(ids.subEventId, ids.timerEventId);
+								tenxApp.Notify.showNotification("fa fa-angle-double-right", "Up Next: " +upcomingTimerEvent.NotificationText, "notify-info", 10000);
+							}
+
 						
 						} else if (self.remaining_seconds <= 10 && self.remaining_seconds > 0) {
 							self.startFlashTime();
@@ -560,7 +614,7 @@
 							from: "bottom",
 							align: "right"
 						},
-						offset: {x: 20, y: 150},
+						offset: {x: 20, y: 450},
 						spacing: 10,
 						z_index: 1031,
 						delay: duration,
