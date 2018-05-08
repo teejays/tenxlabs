@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   TouchableHighlight,
+  KeyboardAvoidingView,
   Image
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -32,6 +33,7 @@ export default class ConnectionInput extends Component {
     
     // define default states
     this.state = {
+        margin: -120,
         code: "",
         appToken: "",
         eventId: 1,
@@ -51,13 +53,20 @@ export default class ConnectionInput extends Component {
 * Methods
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+  _keyboardWillShow(e) {
+    this.setState({margin: -330});
+  }
+  _keyboardWillHide(e) {
+    this.setState({margin: -220});
+  }
+
   setAppToken = (response) => this.setState({ appToken: response });
 
   connectServer() {
     const { code } = this.state;
     axios.post('http://34.211.129.88:3000/screen/connect',{
       "code": code,
-      "eventId":1
+      "eventId":2
     })
       .then(response => {
         this.setAppToken(response.data);
@@ -241,13 +250,13 @@ export default class ConnectionInput extends Component {
   render() {
 
     // declare to be used in render
-    const { code, appToken, action } = this.state;
+    const { code, appToken, action, margin } = this.state;
 
     return (
-      <View style={[Style.overlayScreen]}>
+      <KeyboardAvoidingView style={[Style.overlayScreen]}>
         {this._renderChevron()}  
         {this._renderControl(code, appToken, action)}  
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

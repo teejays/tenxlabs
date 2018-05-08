@@ -100,9 +100,7 @@ export default class EventScreen extends Component {
           <Text style={Style.title}>{this.capitalize(event.Name)}</Text>
           <Text style={[{textAlign:'center'}]}>
             {'\n'}
-            { Moment(event.DatetimeStart).format('dddd, MMM d') }
-            {'\n'}
-            { Moment(event.DatetimeStart).format('hh:mm a') }
+            { Moment(event.DatetimeStart).format('dddd, MMM d, hh:mm a') }
             {'\n\n'}
           </Text>
         </View>
@@ -161,7 +159,14 @@ export default class EventScreen extends Component {
         
         
         <View style={Style.section}> 
-          <Button title='Start Event' onPress={() => this.setState({visible: !this.visible})} />
+          <View style={Style.center}>
+          <TouchableHighlight 
+            style={[Style.button,{width:200}]}
+            onPress={() => this.setState({visible: !this.visible})}
+          >
+            <Text style={[Style.buttonText,{textAlign:'center'}]}>START EVENT</Text>
+          </TouchableHighlight>
+          </View>
           <SlidingUpPanel
             visible={this.state.visible}
             showBackdrop={this.state.showBackdrop}

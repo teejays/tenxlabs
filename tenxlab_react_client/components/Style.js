@@ -1,4 +1,8 @@
 
+import React from 'react';
+var { Dimensions } = require('react-native')
+var width = Dimensions.get('window').width; //full width
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * Colors and Fonts - collated for ease of changing
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -26,13 +30,12 @@ var Style = {
     	backgroundColor: modalColor,
     	position: 'absolute',
     	flex: 1,
-    	width: 380,
     	borderRadius: 10,
     	borderColor:'black',
-    	height: 500,
-    	width: 380,
-    	marginTop: -120,
-    	paddingTop: 20
+    	height: 538,
+    	paddingTop: 20,
+    	marginTop: -320,
+    	width: width
 	},
 	scrollScreen:{
 		flex: 1,
@@ -58,7 +61,8 @@ var Style = {
 		borderColor: 'black',
 		borderWidth: 1,
 		width: 200,
-		textAlign: 'center'
+		textAlign: 'center',
+		fontFamily: 'Courier'
 	},
 	row:{
 		flexDirection: 'row',
@@ -166,7 +170,7 @@ var Style = {
 		width: 60,
 		height: 60,
 		borderRadius: 60/2,
-		margin: 5
+		margin: 15
 	},
 	eventIconJudge: {
 		width: 40,
@@ -189,8 +193,6 @@ var Style = {
 		margin: 15
 	},
 	eventPanelControl: {
-		justifyContent: 'space-around',
-		alignItems: 'space-around'
 	}
 
 };
