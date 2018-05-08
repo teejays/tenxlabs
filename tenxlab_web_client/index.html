@@ -25,6 +25,9 @@
 		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 		<link href="https://fonts.googleapis.com/css?family=Montserrat|Muli|Roboto" rel="stylesheet">
 
+		<!-- Voice Over -->
+		<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+
 		<title>10x Screencast</title>
 
 	</head>
@@ -51,7 +54,7 @@
 				</div>
 
 				<div id="connect-modal-description">
-					To pair this screen with your device, please scan the QR Code below using your 10x Admin App or manually enter the code.
+					To pair this screen with your device, please scan the QR Code below using your 10x Admin app or manually enter the code.
 				</div>
 				
 				<div id="connect-modal-qrcode" class="center-content"></div>
@@ -202,6 +205,8 @@
 				currentTimerEventId: 0,
 				transitionPeriodTime: 5,
 				hasEventStarted: false,
+				hasTimerEventStarted: false,
+				voiceOverText: "",
 
 				
 				init: function() {
@@ -224,6 +229,8 @@
 
 					this.setCurrentSubEvent();
 					this.setCurrentTimerEvent();
+
+					responsiveVoice.speak("Welcome to 10 X");
 					$('.carousel').carousel({interval: 5000});
 
 				},
@@ -292,19 +299,23 @@
 							timerEventActivity = "Presentation by";
 							timerEventTitle = timerEvent.Title;
 							timerEventDesc = "Audience, use your pen and paper for notes";
+							this.voiceOverText = "Presentation by " + timerEvent.Title + " starting now.";
 							break;
 						case "Feedback":
 							if (timerEvent.Title == 'Audience Feeback') {
 								timerEventActivity = "Audience Feedback";
 								timerEventDesc = "Audience, use the Feedback App to give feedback";
+								this.voiceOverText = "Audience, please use the feedback app to give feedback to " + this.getCurrentSubEvent().Presenter.Name;
 							} else if (timerEvent.Title == 'Judge Scoring') {
 								timerEventActivity = "Judge Scoring";
 								timerEventDesc = "Judges, use the 10x paddles to score";
+								this.voiceOverText = "Judges, please use the paddles to score from one to four. Show your scores in four..........      three..........      two..........      ONE...";
 							}
 							break;
 						case "Judge Feedback":
 							timerEventActivity = "Judge's Feedback by";
 							timerEventTitle = timerEvent.Title;
+							this.voiceOverText = "";
 							break;
 						}
 
@@ -317,10 +328,38 @@
 
 				beginCurrentTimerEvent: function() {
 					this.setCurrentTimerEvent();
-					tenxApp.Timer.beginTimer();
+					var timerEvent = this.getCurrentTimerEvent();
+					
+					if (timerEvent.ActivityType == "Feedback" && timerEvent.Title == 'Judge Scoring') {
+						tenxApp.Timer.beginTimer();
+						responsiveVoice.speak("Judges, use the 10x paddles to score");
+						setTimeout(function() {
+							responsiveVoice.speak("Show scores in");
+							setTimeout(function() {
+								responsiveVoice.speak("four...");
+								setTimeout(function() {
+									responsiveVoice.speak("three...");
+									setTimeout(function() {
+										responsiveVoice.speak("two...");
+										setTimeout(function() {
+											responsiveVoice.speak("one...");
+										}, 1000);
+									}, 1000);
+								}, 1000);
+							}, 2000);
+						}, 6000);
+					
+					} else {
+						responsiveVoice.speak(this.voiceOverText);
+						tenxApp.Timer.beginTimer();
+					}
+
 				},
 
 				nextTimerEvent: function() {
+					if (!this.hasEventStarted) {
+						return;
+					}
 					// check if the current subEvent has a next timer event
 					// if last timer event in the sub event
 					if (this.currentTimerEventId == this.getCurrentSubEvent().TimerEvents.length - 1) {
@@ -334,6 +373,9 @@
 				},
 
 				previousTimerEvent: function() {
+					if (!this.hasEventStarted) {
+						return;
+					}
 					// check if the current subEvent has a previous timer event
 					// if last timer event in the sub event
 					if (this.currentTimerEventId == 0) {

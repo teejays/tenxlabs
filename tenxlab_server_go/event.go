@@ -84,7 +84,7 @@ func NewEvent(eventType, name string, datetimeStart time.Time, presenters, judge
 		var timerEvents []TimerEvent
 		timerEvents = append(timerEvents, TimerEvent{"Presentation", s.Presenter.Name, s.PresentationDuration})
 		timerEvents = append(timerEvents, TimerEvent{"Feedback", "Audience Feeback", s.AudienceFeedbackDuration})
-		timerEvents = append(timerEvents, TimerEvent{"Feedback", "Judge Scoring", (20 * time.Second)})
+		timerEvents = append(timerEvents, TimerEvent{"Feedback", "Judge Scoring", (15 * time.Second)})
 		for _, judge := range s.Judges {
 			timerEvents = append(timerEvents, TimerEvent{"Judge Feedback", judge.Name, s.JudgeFeedbackDuration})
 		}
@@ -101,15 +101,15 @@ func NewEvent(eventType, name string, datetimeStart time.Time, presenters, judge
 * M O C K  DA T A 									  *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 var mockPresenters []User = []User{
-	User{Id: 1, Name: "Abhay Sesha"},
-	User{Id: 2, Name: "Supriya Mishra"},
-	User{Id: 3, Name: "Darrell Platz"},
+	{Id: 1, Name: "Abhay Sesha"},
+	{Id: 2, Name: "Supriya Mishra"},
+	{Id: 3, Name: "Darrell Platz"},
 }
 
 var mockJudges []User = []User{
-	User{Id: 4, Name: "Tom Fuller"},
-	User{Id: 5, Name: "Xuelan Zhang"},
-	User{Id: 6, Name: "Nayan Busa"},
+	{Id: 4, Name: "Tom Fuller"},
+	{Id: 5, Name: "Xuelan Zhang"},
+	{Id: 6, Name: "Nayan Busa"},
 }
 var mockEvent1 *Event = NewEvent("Engineering 10x", "Engineering 10x", time.Now(), mockPresenters, mockJudges, (1 * time.Hour), (5 * time.Minute), (2 * time.Minute), (2 * time.Minute))
 
