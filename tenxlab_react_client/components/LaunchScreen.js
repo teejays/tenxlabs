@@ -12,25 +12,23 @@ import Style from './Style'
 
 
 export default class LaunchScreen extends Component {
-  componentDidMount() {    
-    // hardcode loading delay
-    this.props.navigation.navigate('Control');
-    // setTimeout(function(navigation){
-      
-    // }, 1500); 
+
+  constructor (props) {
+    super(props);
+    this.props.navigation.navigate('Event');    
   }
+
+  static navigationOptions = {
+    header: null,
+  };
+
   render () {
     return (
-      <View style={Style.screen}>
+      <View style={Style.launch}>
         <Image
           style={{height:200}}
           resizeMode={'contain'}
           source={require('../images/loading.gif')}
-        />
-        <Image
-          style={{width:150}}
-          resizeMode={'contain'}
-          source={require('../images/nextjump.png')}
         />
       </View>
     )
