@@ -66,7 +66,7 @@ h1, h2, h3, h4, h5, h6, .heading {
 
 /* Connect Modal */
 
-#connect-modal {
+#connect-modal, #tutorial-modal {
 	background: #efefef; 
 	padding: 80px 40px 40px 40px;
 	display: flex;
@@ -74,11 +74,11 @@ h1, h2, h3, h4, h5, h6, .heading {
 	justify-content: center;
 }
 
-#connect-modal-heading {
+#connect-modal-heading, #tutorial-modal-heading {
 	font-size: 3em;	
 }
 
-#connect-modal-description {
+#connect-modal-description, #tutorial-modal-description {
 	font-size: 1em;	
 	margin-top: 20px;
 }
@@ -91,6 +91,15 @@ h1, h2, h3, h4, h5, h6, .heading {
 #connect-modal-code {
 	font-family: 'Roboto Mono', monospace;
 	font-size: 3em;
+}
+
+#tutorial-modal-content{
+	margin-top: 15%;
+	font-size:1em;
+}
+
+#tutorial-modal-carousel{
+	display: inline-flex;
 }
 
 /* Run Modal */
